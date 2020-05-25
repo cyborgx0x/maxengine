@@ -9,7 +9,7 @@ import csv
 chapter_list_source = requests.get(input("Paste the link:")).text
 r = BeautifulSoup(chapter_list_source, 'lxml')
 filename = str(r.title.text)
-filename=filename.replace(" ", "-")+'.html'
+filename='./serving_static/templates/' + filename.replace(" ", "-")+'.html'
 chapter_list = r.find_all('ul', class_='list-chapter')
 
 urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', str(chapter_list))

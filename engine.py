@@ -1,34 +1,22 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-import csv
+import writefile
 
+# Get path of file
+# def get_name(): 
+#     filename = str(r.title.text)
+#     filename='./templates/' + filename.replace(" ", "-")+'.html'
+#     return filename
 
-# Get chapter list
-
-chapter_list_source = requests.get(input("Paste the link:")).text
-r = BeautifulSoup(chapter_list_source, 'lxml')
-filename = str(r.title.text)
-filename='./serving_static/templates/' + filename.replace(" ", "-")+'.html'
-chapter_list = r.find_all('ul', class_='list-chapter')
-
-urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', str(chapter_list))
-# print(urls)
-# print(filename)
-html_file = open(filename,'w')
-# # Get content
-for url in urls:
+def chaptername(url):
     chapter_source = requests.get(url).text
     soup = BeautifulSoup(chapter_source, 'lxml')
+    return soup.title.text
 
-    chapter_name = soup.title.text
-    print(chapter_name)
-
-    chapter_content = soup.find('div', class_='chapter-c')
-    print(chapter_content)
-
-    html_file.write(chapter_name)
-    html_file.write(str(chapter_content))
-
-html_file.close()
+def chaptercontent(url):
+    chapter_source = requests.get(url).text
+    soup = BeautifulSoup(chapter_source, 'lxml')
+    content = str(soup.find('div', class_='chapter-c'))
+    return content
 

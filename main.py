@@ -1,13 +1,26 @@
-
 from flask import Flask
 from flask import render_template
+from flask import request, redirect
+import engine
 
 app = Flask(__name__)
 
 @app.route("/")
-def fullchapter():
-    message = "Hello, World"
-    return  render_template('Tam-Thốn-Nhân-Gian.html', message=message)
+def index():
+    message = """
+                <h1>insert link here</h1> <br>
+                <form method="POST">
+                    <input name="url">
+                </form>
+            """
+    return  message
+
+@app.route("/", methods=['POST'])
+def callfunc():
+    link = request.form['url']
+    
+    return engine.chaptername(link) + engine.chaptercontent(link)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

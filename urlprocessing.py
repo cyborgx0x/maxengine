@@ -1,9 +1,11 @@
-import bs4 as BeautifulSoup
+from bs4 import BeautifulSoup
 import lxml
 import requests
+import re
 
-def get_url(a): 
-    chapter_list_source = requests.get(a).text
+
+def get_url(y):
+    chapter_list_source = requests.get(y).text
     r = BeautifulSoup(chapter_list_source, 'lxml')
     chapter_list = r.find_all('ul', class_='list-chapter')
     # urls = [e.a.attrs['href'] for e in chapter_list]

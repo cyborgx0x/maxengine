@@ -1,13 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import re
 import writefile
 
-# Get path of file
-# def get_name(): 
-#     filename = str(r.title.text)
-#     filename='./templates/' + filename.replace(" ", "-")+'.html'
-#     return filename
 
 def chaptername(url):
     chapter_source = requests.get(url).text
@@ -20,3 +14,9 @@ def chaptercontent(url):
     content = str(soup.find('div', class_='chapter-c'))
     return content
 
+# create
+def createname(x):
+    filename = './templates/' + x.replace(" ", "-")   + '.html'
+    filename = filename.replace(":","-")
+    filename = filename.replace("?","-")
+    return filename

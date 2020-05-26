@@ -4,26 +4,19 @@ from flask import request, redirect
 import engine
 import urlprocessing
 import writefile
+from app import app
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    message = """
-                <center>
-                <h1>insert link here</h1> <br>
-                <form method="POST">
-                    <input name="url">
-                </form>
-                </center>
-            """
-    return  message
+    return  render_template("form.html")
 
 @app.route("/", methods=['POST'])
 def callfunc():
     link = request.form['url']
     urlslist = urlprocessing.get_url(link)
-    message = {}
+    message = ""
     for url in urlslist:
         b = engine.chaptername(url)
         a = engine.createname(b)
@@ -31,8 +24,9 @@ def callfunc():
         with open(a, 'w', encoding='utf-8') as f:
             f.write(b + c )
             f.flush()
-        message[b] = a
+        message = message + "<a href=\""+ a + "\">" + b + "</a> <br>"
     return message
+
 
 
 if __name__ == "__main__":

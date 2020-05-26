@@ -25,4 +25,9 @@ def getcontent():
         # with open(a, 'w', encoding='utf-8') as f:
         #     f.write(b + c )
         #     f.flush()
-    return  message
+    return  redirect('postlist')
+
+@app.route("/postlist")
+def post():
+    posts = Post.query.all()
+    return  render_template("post.html", posts = posts)

@@ -1,24 +1,28 @@
+from flask import Flask
 from flask import render_template
-from app import app
-from app.forms import LoginForm
+from flask import request, redirect
+from engine import chaptercontent, chaptername
+from urlprocessing import get_url
+from app import app, db
+from app.models import Post
 
-@app.route('/')
-@app.route('/index')
+
+@app.route("/")
 def index():
-    user = {'username': 'Miguel'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    return  render_template("form.html")
 
-@app.route('/login')
-def login():
-    form = LoginForm()
-    return render_template('login.html', title = 'Sign In', form = form)
+@app.route("/", methods=['GET','POST'])
+def getcontent():
+    link = request.form['url']
+    urlslist = get_url(link)
+    message = "successed"
+    for url in urlslist:
+        b = chaptername(url)
+        c = chaptercontent(url)
+        p = Post(title=b, body=c)
+        db.session.add(p)
+        db.session.commit()
+        # with open(a, 'w', encoding='utf-8') as f:
+        #     f.write(b + c )
+        #     f.flush()
+    return  message

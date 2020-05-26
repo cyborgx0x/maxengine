@@ -16,7 +16,6 @@ lxml==4.5.1
 Mako==1.1.2
 MarkupSafe==1.1.1
 mysql-connector==2.2.9
-pkg-resources==0.0.0
 python-dateutil==2.8.1
 python-dotenv==0.13.0
 python-editor==1.0.4

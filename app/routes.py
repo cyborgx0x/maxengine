@@ -19,7 +19,7 @@ def getcontent():
     for url in urlslist:
         b = chaptername(url)
         c = chaptercontent(url)
-        p = Post(title=b, body=c)
+        p = Post(title=b, content=c)
         db.session.add(p)
         db.session.commit()
         # with open(a, 'w', encoding='utf-8') as f:

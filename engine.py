@@ -5,35 +5,18 @@ import re
 from app.models import Post
 from app import app, db
 
-def get_url(link):
-    coreurl=link.split('/')[2]
-    urllibrary={
-        "truyenfull.vn":"div#list-chapter",
-        "truyen.tangthuvien.vn":"ul.cf"
-    }
-    comparing=urllibrary[coreurl]
-    chapter_list_source = requests.get(link).text
-    r = BeautifulSoup(chapter_list_source, 'lxml')
-    chapter_list = r.select(comparing)
-    # urls = [e.a.attrs['href'] for e in chapter_list]
-    return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', str(chapter_list))
-    
 
 class Content:
-    """
+    """ 
     Class for all page
     """
     def __init__(self,url,title,body):
         self.url = url
         self.title = title
         self.body = body
-    def writedb(self):
-        """
-        write to database
-        """
-        print("URL: {}".format(self.url))
-        print("title: {}".format(self.title))
-        print("body: {}".format(self.body))   
+    def __repr__(self):
+        return '{}  \n {}  \n {}'.format(self.url,self.title,self.body)
+ 
 
 class Website:
     """Contain the website structure"""
@@ -74,26 +57,9 @@ class Crawler:
             body = self.selector(file, site.bodytag)
             if title != '' and body != '':
                 content = Content(url, title, body)
-            newpost = Post(title=title, content=body)
-            db.session.add(newpost)
-            db.session.commit()
+                print(content)
+            # newpost = Post(title=title, content=body)
+            # db.session.add(newpost)
+            # db.session.commit()
                 
 
-crawler = Crawler()
-
-urllib=[
-    ['truyenfull','truyenfull.vn','title', 'div.chapter-c'],
-    ['tangthuvien','truyen.tangthuvien.vn','title', 'div.chapter-c-content'],
-    ['dantri','dantri.com.vn','title', 'div#divNewsContent'],
-]
-websites = []
-for row in urllib:
-    websites.append(Website(row[0], row[1], row[2], row[3]))
-
-
-def fictionparser(link):
-    links = get_url(link)
-    for l in links:
-        crawler.parse(websites[0], l)
-def normalnews(link):
-    crawler.parse(websites[2],link)

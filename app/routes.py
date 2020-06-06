@@ -1,9 +1,9 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect
-from engine import normalnews
-from app import app, db
+from getnews import get_news
 from app.models import Post
+from app import app
 
 @app.route("/")
 def index():
@@ -12,7 +12,7 @@ def index():
 @app.route("/", methods=['GET','POST'])
 def getcontent():
     link = request.form['url']
-    normalnews(link)
+    get_news(link)
     return  redirect('postlist')
 
 @app.route("/postlist")

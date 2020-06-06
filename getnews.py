@@ -12,7 +12,7 @@ class News:
         self.excerpt = excerpt
     def __repr__(self):
         return '{}  \n {}  \n {}'.format(self.url,self.title,self.excerpt)
- 
+
     
 class Newsparser(Crawler):
     def parse(self, site, url):

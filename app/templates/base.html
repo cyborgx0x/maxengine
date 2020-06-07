@@ -1,18 +1,32 @@
 <html>
     <head>
       {% if title %}
-      <title>{{ title }} - Microblog</title>
+      <title>{{ title }} - Lucas Viewer</title>
       {% else %}
-      <title>Welcome to Microblog</title>
+      <title>Welcome to Lucas Viewer</title>
       {% endif %}
     </head>
     <body>
-        <div>Microblog: 
-            <a href="/">Home</a>
-            <a href="/post">All Post</a>
-            <a href="/submit">Submit <Link:mf></Link:mf></a>
+        <div>Lucas Viewer: 
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('all_post') }}">All Post</a>
+            <a href="{{ url_for('submit_link') }}">Submit <Link:mf></Link:mf></a>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
         </div>
         <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
 
         {% block content %}{% endblock %}
     </body>

@@ -4,26 +4,25 @@ from bs4 import BeautifulSoup
 import lxml
 import re
 
+
 def get_url(link):
-    coreurl=link.split('/')[2]
-    urllibrary={
-        "truyenfull.vn":"div#list-chapter",
-        "truyen.tangthuvien.vn":"ul.cf"
-    }
-    comparing=urllibrary[coreurl]
     chapter_list_source = requests.get(link).text
     r = BeautifulSoup(chapter_list_source, 'lxml')
     chapter_list = r.select(comparing)
     # urls = [e.a.attrs['href'] for e in chapter_list]
     return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', str(chapter_list))
     
+coreurl=link.split('/')[2]
+urllibrary={
+"truyenfull.vn":"div#list-chapter",
+"truyen.tangthuvien.vn":"ul.cf"
+}
+comparing=urllibrary[coreurl]
 
 crawler = Crawler()
+lib = receive_lib(coreurl)
+site = Website(lib.website_name, lib.website_url, lib.website_title_tag, lib.website_body_tag)
 
-urllib=[
-    ['truyenfull','truyenfull.vn','title', 'div.chapter-c'],
-    ['tangthuvien','truyen.tangthuvien.vn','title', 'div.chapter-c-content'],
-]
 websites = []
 for row in urllib:
     websites.append(Website(row[0], row[1], row[2], row[3]))

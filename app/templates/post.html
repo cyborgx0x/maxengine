@@ -1,12 +1,16 @@
-{% for p in posts %}
-<div>
-    <p>
-        {{ p.id }} - {{ p.title }} 
-        <br>
-        {{ p.original_link }}
-        <br>
-        {{ p.excerpt }}
-      <hr>
-    </p>
-</div>   
-{% endfor %}
+{% extends "base.html" %}
+{% block content%}
+  {% for p in posts %}
+  <div>
+      <p>
+        <a href="/post/{{p.id}}">{{ p.id }} - {{ p.title }} </a>
+          
+          <br>
+          {{ p.original_link }}
+          <br>
+          {{ p.excerpt }}
+        <hr>
+      </p>
+  </div>   
+  {% endfor %}
+{% endblock %}

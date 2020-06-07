@@ -8,14 +8,7 @@ class Job:
         self.url = url
         self.title = title
         self.excerpt = excerpt
-    def print(self):
-        """
-        write to database
-        """
-        print("URL: {}".format(self.url))
-        print("title: {}".format(self.title))
-        print("excerpt: {}".format(self.excerpt))   
- 
+    
     
 class Jobparser(Crawler):
     def parse(self, site, url):

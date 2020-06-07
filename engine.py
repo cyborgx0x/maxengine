@@ -2,8 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import lxml
 import re
-from app.models import Post
-from app import app, db
+
 
 
 class Content:
@@ -26,40 +25,32 @@ class Website:
         self.titletag = titletag
         self.bodytag = bodytag
 
-class Crawler: 
-    '''
-    Crawler Engine
-    '''
+def getpage(url):
+    try: 
+        source = requests.get(url).text
+    except  requests.exceptions.RequestException:
+        return None
+    return BeautifulSoup(source, 'lxml')
 
-    def getpage(self, url):
-        try: 
-            source = requests.get(url).text
-        except  requests.exceptions.RequestException:
-            return None
-        return BeautifulSoup(source, 'lxml')
+def selector(page, selector):
+    """
+    the selector rule
+    """
+    elements = page.select(selector)
+    if elements is not None and len(elements) > 0:
+        return '\n'.join([elem.get_text() for elem in elements])
+    return ''
 
-    def selector(self, page, selector):
-        """
-        the selector rule
-        """
-        elements = page.select(selector)
-        if elements is not None and len(elements) > 0:
-            return '\n'.join([elem.get_text() for elem in elements])
-        return ''
+def parse(site, url):
+    """
+    extract content
+    """
+    file = getpage(url)
+    if file is not None:
+        title = selector(file, site.titletag)
+        body = selector(file, site.bodytag)
+    return url, title, body
 
-    def parse(self, site, url):
-        """
-        extract content
-        """
-        file = self.getpage(url)
-        if file is not None:
-            title = self.selector(file, site.titletag)
-            body = self.selector(file, site.bodytag)
-            if title != '' and body != '':
-                content = Content(url, title, body)
-                print(content)
-            # newpost = Post(title=title, content=body)
-            # db.session.add(newpost)
-            # db.session.commit()
+
                 
 

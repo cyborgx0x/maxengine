@@ -10,6 +10,7 @@ from app.models import User
 from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
+from flask import Markup
 
 @app.route("/submit")
 def submit_link():
@@ -39,7 +40,7 @@ def specific_post(post_id):
 @app.route('/login', methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('/'))
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(user_name=form.username.data).first()
@@ -71,3 +72,13 @@ def register():
         flash('Congratulation, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('reg.html', title='Register', form=form)
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(user_name=username).first_or_404()
+    posts = [
+        {'author' : user, 'body' : 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=user, posts=posts)

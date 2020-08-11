@@ -3,7 +3,7 @@ from flask import render_template
 from flask import request, redirect
 from app.models import Post
 from app import app
-from app.form import LoginForm, RegistrationForm
+from app.form import LoginForm, RegistrationForm, Quiz_answer
 from flask import flash, url_for
 from flask_login import current_user, login_user
 from app.models import User
@@ -11,7 +11,8 @@ from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
 from flask import Markup
-
+from database import view_all_post
+from quizmodule import Question
 @app.route("/submit")
 def submit_link():
     return  render_template("form.html")
@@ -82,3 +83,8 @@ def user(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=user, posts=posts)
+@app.route('/quiz')
+def quizviewer():
+    quiz_bank = view_all_post()
+    quiz = Quiz_answer()
+    return render_template('quiz.html', quiz_bank=quiz_bank, quiz = quiz)

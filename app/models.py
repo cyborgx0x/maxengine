@@ -1,6 +1,6 @@
 from app import db
 from datetime import datetime
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, Text
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
@@ -52,3 +52,15 @@ class Urllib(db.Model):
     website_url = db.Column('website_url', db.String(100))
     website_title_tag = db.Column('website_title_tag', db.String(100))
     website_body_tag = db.Column('website_body_tag', db.String(100))
+
+class Quizbank(db.Model):
+    'quizbank', meta
+    __tablename__ = 'quizbank'
+    id = db.Column('id',db.Integer, primary_key=True)
+    question = db.Column('question',Text)
+    solution = db.Column('solution',Text)
+    other_answer_1 = db.Column('other_answer_1', Text)
+    other_answer_2 = db.Column('other_answer_2', Text)
+    other_answer_3 = db.Column('other_answer_3', Text)
+    hint = db.Column('hint',Text)
+    full_solution = db.Column('full_solution', Text)

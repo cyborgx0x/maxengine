@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect
-from app.models import Post
+from app.models import Post, Food
 from app import app
 from app.form import LoginForm, RegistrationForm, Quiz_answer
 from flask import flash, url_for
@@ -11,7 +11,7 @@ from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
 from flask import Markup
-from database import view_all_post
+from database import view_all_post,receive_food
 from quizmodule import Question
 @app.route("/submit")
 def submit_link():
@@ -83,8 +83,20 @@ def user(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=user, posts=posts)
+
+
 @app.route('/quiz')
 def quizviewer():
     quiz_bank = view_all_post()
     quiz = Quiz_answer()
     return render_template('quiz.html', quiz_bank=quiz_bank, quiz = quiz)
+
+
+@app.route('/kcal')
+def kcalcal():
+    food_data = {
+        "rice":4,
+        "meat":4
+    }
+    kcal = food_data["rice"]*50*3+food_data["meat"]*4*100
+    return render_template('kcal.html', kcal=kcal)

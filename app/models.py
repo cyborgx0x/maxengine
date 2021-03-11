@@ -64,3 +64,10 @@ class Quizbank(db.Model):
     other_answer_3 = db.Column('other_answer_3', Text)
     hint = db.Column('hint',Text)
     full_solution = db.Column('full_solution', Text)
+
+class Food(db.Model):
+    'food', meta
+    __tablename__ = 'food'
+    id = db.Column('id', db.Integer, primary_key=True)
+    food_name = db.Column('food_name', Text)
+    food_nutrient = db.Column('food_nutrient', db.Float)

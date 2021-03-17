@@ -7,19 +7,21 @@ from app import login
 from hashlib import md5
 meta = MetaData()
 
-class Post(db.Model):
-    'engine', meta
-    __tablename__ = "engine"
-    id = db.Column('id',db.Integer, primary_key=True)
-    title = db.Column('post_title',db.Unicode(300))
-    content = db.Column('post_content',db.Unicode(5000))
-    timestamp = db.Column('post_date_gmt',db.DateTime, index=True, default=datetime.utcnow)
-    excerpt = db.Column('post_excerpt',db.Unicode(500))
-    original_link = db.Column('original_link', db.Unicode(300))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+class Fiction(db.Model):
+    'fiction', meta
+    __tablename__ = "fiction"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Unicode(300))
+    author = db.Column(db.Unicode(300))
+    # category = db.Column(db.Integer, fb.ForeignKey('user.id'))
+    status = db.Column(db.Boolean)
+    view = db.Column(db.Integer)
+    desc = db.Column(db.Text)
+    cover = db.Column(db.Text)
+    publish_year = db.Column(db.DateTime)
 
     def __repr__(self):
-        return 'Post {}>'.format(self.title)
+        return 'Fiction info {}>'.format(self.name)
     
 class User(UserMixin, db.Model):
     'users', meta

@@ -1,4 +1,4 @@
-from app.models import Post, Urllib, Quizbank, Food
+from app.models import Fiction, Urllib, Quizbank, Food
 from app import app, db
 
 def insert_post(title,excerpt,original_link):

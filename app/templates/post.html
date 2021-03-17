@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content%}
-  {% for p in posts %}
+  {% for p in fiction %}
   <div>
       <p>
-        <a href="/post/{{p.id}}">{{ p.id }} - {{ p.title }} </a>
+        <a href="/post/{{p.id}}">{{ p.id }} - {{ p.name }} </a>
           
           <br>
-          {{ p.original_link }}
+          {{ p.author }}
           <br>
-          {{ p.excerpt }}
+          {{ p.desc }}
         <hr>
       </p>
   </div>   

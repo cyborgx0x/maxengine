@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect
-from app.models import Post, Food
+from app.models import Fiction, Food
 from app import app
 from app.form import LoginForm, RegistrationForm, Quiz_answer
 from flask import flash, url_for
@@ -30,8 +30,8 @@ def index():
 @app.route("/post")
 @login_required
 def all_post():
-    posts = Post.query.all()
-    return  render_template("post.html", posts = posts)
+    fiction = Fiction.query.all()
+    return  render_template("post.html", fiction = fiction)
 
 @app.route("/post/<int:post_id>")
 def specific_post(post_id):
@@ -91,12 +91,3 @@ def quizviewer():
     quiz = Quiz_answer()
     return render_template('quiz.html', quiz_bank=quiz_bank, quiz = quiz)
 
-
-@app.route('/kcal')
-def kcalcal():
-    food_data = {
-        "rice":4,
-        "meat":4
-    }
-    kcal = food_data["rice"]*50*3+food_data["meat"]*4*100
-    return render_template('kcal.html', kcal=kcal)

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content%}
-{{ post.title }}
+{{ post.name }}
 <hr>
-{{ post.content }}
+{{ post.author }}
 <br>
-<a href="{{ post.original_link }}">original link</a>
+{{ post.desc }}
 {% endblock %}

@@ -10,8 +10,6 @@
         <div>Lucas Viewer: 
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('all_post') }}">All Post</a>
-            <a href="{{ url_for('quizviewer') }}">Training</a>
-            <a href="{{ url_for('submit_link') }}">Submit <Link:mf></Link:mf></a>
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}">Login</a>
             {% else %}

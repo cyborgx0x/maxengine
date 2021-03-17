@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect
-from app.models import Fiction, Food
+from app.models import Fiction
 from app import app
 from app.form import LoginForm, RegistrationForm, Quiz_answer
 from flask import flash, url_for
@@ -11,31 +11,20 @@ from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
 from flask import Markup
-from database import view_all_post,receive_food
-from quizmodule import Question
-@app.route("/submit")
-def submit_link():
-    return  render_template("form.html")
-
-# @app.route("/submit", methods=['GET','POST'])
-# def submit_link():
-#     link = request.form['url']
-#     get_news(link)
-#     return  redirect('/')
+from database import view_all_post
 
 @app.route("/")
 def index():
     return  render_template("index.html")
 
 @app.route("/post")
-@login_required
 def all_post():
     fiction = Fiction.query.all()
     return  render_template("post.html", fiction = fiction)
 
 @app.route("/post/<int:post_id>")
 def specific_post(post_id):
-    this_post = Post.query.filter_by(id=post_id).first()
+    this_post = Fiction.query.filter_by(id=post_id).first()
     return  render_template("thispost.html", post = this_post)
 
 @app.route('/login', methods=['GET','POST'])
@@ -84,10 +73,4 @@ def user(username):
     ]
     return render_template('user.html', user=user, posts=posts)
 
-
-@app.route('/quiz')
-def quizviewer():
-    quiz_bank = view_all_post()
-    quiz = Quiz_answer()
-    return render_template('quiz.html', quiz_bank=quiz_bank, quiz = quiz)
 

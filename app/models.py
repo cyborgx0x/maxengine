@@ -31,7 +31,7 @@ class User(UserMixin, db.Model):
     user_name = db.Column('user_name', db.String(64))
     email = db.Column('email', db.String(120))
     password_hash = db.Column(db.String(128))
-    post = db.relationship('Post', backref ='author', lazy='dynamic')
+    # post = db.relationship('Post', backref ='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column (db.DateTime, default = datetime.utcnow)
     def __repr__(self):
@@ -47,29 +47,16 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
-class Urllib(db.Model):
-    'urllib', meta
-    id = db.Column('id', db.Integer, primary_key=True)
-    website_name = db.Column('website_name', db.String(100))
-    website_url = db.Column('website_url', db.String(100))
-    website_title_tag = db.Column('website_title_tag', db.String(100))
-    website_body_tag = db.Column('website_body_tag', db.String(100))
 
-class Quizbank(db.Model):
-    'quizbank', meta
-    __tablename__ = 'quizbank'
-    id = db.Column('id',db.Integer, primary_key=True)
-    question = db.Column('question',Text)
-    solution = db.Column('solution',Text)
-    other_answer_1 = db.Column('other_answer_1', Text)
-    other_answer_2 = db.Column('other_answer_2', Text)
-    other_answer_3 = db.Column('other_answer_3', Text)
-    hint = db.Column('hint',Text)
-    full_solution = db.Column('full_solution', Text)
+class Chapter(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(160))
+    content = db.Column(db.Text)
+    view_count = db.Column(db.Integer)
 
-class Food(db.Model):
-    'food', meta
-    __tablename__ = 'food'
-    id = db.Column('id', db.Integer, primary_key=True)
-    food_name = db.Column('food_name', Text)
-    food_nutrient = db.Column('food_nutrient', db.Float)
+
+class Author(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(160))
+    birth_year = db.Column(db.Integer)
+    author_page = db.Column(db.String(160))

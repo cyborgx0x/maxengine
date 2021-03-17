@@ -13,7 +13,7 @@ class Fiction(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Unicode(300))
     author = db.Column(db.Unicode(300))
-    # category = db.Column(db.Integer, fb.ForeignKey('user.id'))
+    # category = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column(db.Boolean)
     view = db.Column(db.Integer)
     desc = db.Column(db.Text)
@@ -22,6 +22,24 @@ class Fiction(db.Model):
 
     def __repr__(self):
         return 'Fiction info {}>'.format(self.name)
+
+
+
+class Chapter(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(160))
+    content = db.Column(db.Text)
+    view_count = db.Column(db.Integer)
+    fiction = db.Column(db.Integer, db.ForeignKey('fiction.id'))
+    chapter_order = db.Column(db.Integer)
+
+
+class Author(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(160))
+    birth_year = db.Column(db.Integer)
+    author_page = db.Column(db.String(160))
+
     
 class User(UserMixin, db.Model):
     'users', meta
@@ -46,17 +64,3 @@ class User(UserMixin, db.Model):
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
-
-
-class Chapter(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(160))
-    content = db.Column(db.Text)
-    view_count = db.Column(db.Integer)
-
-
-class Author(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(160))
-    birth_year = db.Column(db.Integer)
-    author_page = db.Column(db.String(160))

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect
-from app.models import Fiction
+from app.models import Fiction, Chapter
 from app import app
 from app.form import LoginForm, RegistrationForm, Quiz_answer
 from flask import flash, url_for
@@ -25,7 +25,15 @@ def all_post():
 @app.route("/post/<int:post_id>")
 def specific_post(post_id):
     this_post = Fiction.query.filter_by(id=post_id).first()
-    return  render_template("thispost.html", post = this_post)
+    chapter = Chapter.query.filter_by(fiction=post_id)
+    return  render_template("thispost.html", post = this_post, chapter = chapter)
+
+@app.route("/<int:fiction_id>/<int:chapter_id>")
+def chapter_viewer(chapter_id, fiction_id):
+    chapter_view = Chapter.query.filter_by(id=chapter_id).first()
+    fiction = Fiction.query.filter_by(id=fiction_id).first()
+    return render_template('chapter.html', post = chapter_view, fiction=fiction)
+
 
 @app.route('/login', methods=['GET','POST'])
 def login():

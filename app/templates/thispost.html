@@ -5,4 +5,9 @@
 {{ post.author }}
 <br>
 {{ post.desc }}
+<br>
+{% for c in chapter %}
+<br>
+{{ c.chapter_order }} - <a href="/{{ post.id }}/{{ c.id }}">{{ c.name }}</a> - has {{ c.view_count }} views
+{% endfor %}
 {% endblock %}

@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask import render_template
 from flask import request, redirect
-from app.models import Fiction, Chapter
+from app.models import Fiction, Chapter, Quote, Author
 from app import app
 from app.form import LoginForm, RegistrationForm, Quiz_answer
 from flask import flash, url_for
@@ -15,25 +15,69 @@ from database import view_all_post
 
 @app.route("/")
 def index():
-    return  render_template("index.html")
+    return  render_template("space.html")
 
 @app.route("/post")
 def all_post():
     fiction = Fiction.query.all()
     return  render_template("post.html", fiction = fiction)
 
-@app.route("/post/<int:post_id>")
-def specific_post(post_id):
-    this_post = Fiction.query.filter_by(id=post_id).first()
-    chapter = Chapter.query.filter_by(fiction=post_id)
-    return  render_template("thispost.html", post = this_post, chapter = chapter)
+@app.route("/post/<int:fiction_id>/")
+def specific_post(fiction_id):
+    fiction = Fiction.query.filter_by(id=fiction_id).first()
+    chapter = Chapter.query.filter_by(fiction=fiction_id).first()
+    quote = Quote.query.filter_by(fiction=fiction_id)
+    return  render_template("viewer.html", post = fiction, chapter = chapter, quote = quote)
 
 @app.route("/<int:fiction_id>/<int:chapter_id>")
 def chapter_viewer(chapter_id, fiction_id):
     chapter_view = Chapter.query.filter_by(id=chapter_id).first()
     fiction = Fiction.query.filter_by(id=fiction_id).first()
+    current = chapter_view.chapter_order
+    
     return render_template('chapter.html', post = chapter_view, fiction=fiction)
 
+@app.route("/api/<int:fiction_id>/", methods = ['GET'])
+def api_send_fiction(fiction_id):
+    fiction = Fiction.query.filter_by(id=fiction_id).first()
+    chapter = Chapter.query.filter_by(fiction=fiction_id) 
+    api_return = {
+        "id" : fiction.id,
+        "name" : fiction.name,
+        "author": fiction.author,
+        "status": fiction.status,
+        "totalview": fiction.view,
+        "detail": fiction.desc,
+        "coverpage": fiction.cover,
+        "publishyear": fiction.publish_year,
+        "page": fiction.page_count
+    }
+    return api_return
+    
+
+@app.route("/api/<int:fiction_id>/<int:chapter_order>", methods = ['GET'])
+def api_send_chapter_content(chapter_order, fiction_id):
+    chapter = Chapter.query.filter_by(fiction=fiction_id, chapter_order=chapter_order).first()
+    return {
+        "order":chapter.chapter_order,
+        "name" : chapter.name,
+        "content": chapter.content
+    }
+
+@app.route("/api/chapter_list_by_fiction/<int:fiction_id>", methods = ['GET'])
+def api_send_chapter_list(fiction_id):
+    chapter = Chapter.query.filter_by(fiction=fiction_id)
+    newdict ={}
+    for c in chapter:
+       newdict[c.id] = c.name
+    return newdict
+
+@app.route("/quote/<int:quote_id>", methods = ['GET'])
+def get_quote(quote_id):
+    quote = Quote.query.filter_by(id=quote_id).first()
+    author = Author.query.filter_by(id=quote.author_id).first()
+    fiction = Fiction.query.filter_by(id=quote.fiction).first()
+    return render_template("quote.html", quote = quote, author = author, fiction = fiction)
 
 @app.route('/login', methods=['GET','POST'])
 def login():

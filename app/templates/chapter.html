@@ -1,18 +1,67 @@
 {% extends "base.html" %}
 {% block content%}
 
-{{ fiction.name }}
 
-<br>
-<div id="post-content"> </div>
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+<div class="row justify-content-center">
+    <div class="col-lg-4" style="margin: 10px;">
+        <button type="button" class="btn btn-secondary" onclick="toPreChapter()">Chương Trước</button>
+        <button type="button" class="btn btn-warning" onclick="loadnewContent()">Danh Sách</button>
+        <button type="button" class="btn btn-primary" onclick="toNextChapter()">Chương Sau</button>
+    </div>
+
+</div>
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card card-lg">
+            <div class="card-header justify-content-center" >
+                <div class="card-title" >
+                    {{ fiction.name }}
+                </div>
+                <br>
+
+            </div>
+            <div class="card-body">
+
+                <div id="fictionID" data="{{fiction.id}}"></div>
+                <div id="currentChapter" data="{{post.id}}"></div>
+                <div class="card-title" id="exampleModalLabel">
+                    {{ post.name }}
+        
+                </div>
+                <div style="white-space: pre-line" id="post-content" class="user-select-none" >
+                    <div class="markdown" id = viewerContent>
+                        <p>
+                            {{ post.content }}
+                        </p>
+                    </div>
+            </div>
+        </div>
+
+        <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
+            <!-- <a href="{{ url_for('index') }}{{ fiction.id }}/{{ pre_chapter }}" role="button" class="btn btn-light">Chương trước</a>
+            <a href="#" role="button" class="btn btn-dark">Danh sách chương</a>
+            <a href="{{ url_for('index') }}{{ fiction.id }}/{{ next_chapter_link }}" role="button" class="btn btn-light">Chương sau</a>
+          </div> -->
+ 
+            <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
+                <!-- <button href="{{ url_for('index') }}{{ fiction.id }}/{{pre_chapter }}" type="button" class="btn btn-light">Chương trước</button>
+                <button href="#" type="button" class="btn btn-dark">Danh sách chương</button>
+                <button href="{{ url_for('index') }}{{ fiction.id }}/{{ next_chapter_link }}"type="button" class="btn btn-light">Chương sau</button>
+              </div> -->
+        </div>
+    </div>
+
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-4" style="margin: 10px;">
+        <button type="button" class="btn btn-secondary" onclick="toPreChapter()">Chương Trước</button>
+        <button type="button" class="btn btn-warning" onclick="loadnewContent()">Danh Sách</button>
+        <button type="button" class="btn btn-primary" onclick="toNextChapter()">Chương Sau</button>
+    </div>
+
+</div>
 <script src="{{ url_for('static', filename='viewer.js') }}""></script>
 
-{{ post.name }}
-<br>
-{{ post.content }}
-
-
-<br>
 {% endblock %}

@@ -13,12 +13,15 @@ class Fiction(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Unicode(300))
     author = db.Column(db.Unicode(300))
-    # category = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column(db.Boolean)
     view = db.Column(db.Integer)
     desc = db.Column(db.Text)
     cover = db.Column(db.Text)
-    publish_year = db.Column(db.DateTime)
+    publish_year = db.Column(db.Integer)
+    page_count = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    tiki_link = db.Column(db.Text)
+    mediafire_link = db.Column(db.Text)
 
     def __repr__(self):
         return 'Fiction info {}>'.format(self.name)
@@ -40,7 +43,15 @@ class Author(db.Model):
     birth_year = db.Column(db.Integer)
     author_page = db.Column(db.String(160))
 
-    
+class Quote(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    quote = db.Column(db.Text)
+    fiction = db.Column(db.Integer, db.ForeignKey('fiction.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    img = db.Column(db.Text)
+
+
+
 class User(UserMixin, db.Model):
     'users', meta
     id = db.Column('id', db.Integer, primary_key=True)

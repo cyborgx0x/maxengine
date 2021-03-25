@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    SQLALCHEMY_DATABASE_URI = 'mysql://bb7rscqll4s4fucu:o4q5vdaua9r1k7x3@un0jueuv2mam78uv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/wp0cqq4t5leuhx3v' 
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost:3306/lucasviewer' 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     

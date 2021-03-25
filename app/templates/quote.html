@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content%}
+<div class="row justify-content-center">
+    <div class="col-8">
+
+        <p>
+            <img src="{{quote.img}}" alt="" class="card-img-top">
+            <blockquote class="blockquote">
+                <p class="mb-0">{{ quote.quote }}</p>
+                {{author.name}} <cite title="Source Title">{{fiction.name}}</cite>
+            </blockquote>
+            <a href="/post/{{fiction.id}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Đọc tác phẩm được trích đoạn</a>
+
+        </p>
+
+
+    </div>
+</div>
+{% endblock %}

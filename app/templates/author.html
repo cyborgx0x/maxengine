@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ author.name}}: All fictions{% endblock %}
+{% block content%}
+
+<div class="row">
+    <div class="col-xl-4">
+        {% include '_author.html'  %}   
+    </div>
+    <div class="col-xl-8 card">
+        {% for fiction in fictions %}
+
+        <div class="col-md-3 col-xs-4">
+            {% include '_fiction.html'  %}   
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+<div class="row row-deck">
+
+</div>
+
+
+
+{% endblock %}

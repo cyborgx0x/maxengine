@@ -1,0 +1,25 @@
+<div class="dropdown">
+    
+    {% if previous_chapter %}
+    <a type="button" class='btn btn-primary' href="/chapter/{{previous_chapter}}">Trước</a>
+    {% else %}
+    <a type="button" class ='btn btn-secondary'disabled href="#">Trước</a>
+    {% endif %}
+    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+    <!-- Download SVG icon from http://tabler-icons.io/i/menu-2 -->
+	<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" /></svg>    
+    </button>
+    <div class="dropdown-menu">
+        <span class="dropdown-header">Danh sách chương</span>
+        {% for chapter in chapters %}
+        <a href="/chapter/{{chapter.id}}/" class="dropdown-item" type="button">{{chapter.name}}</a>           
+        {% endfor %}
+        
+    </a>
+    </div>
+    {% if next_chapter %}
+    <a type="button" class='btn btn-primary' href="/chapter/{{next_chapter}}">Sau</a>
+    {% else %}
+    <a type="button" class ='btn btn-secondary'disabled href="#">Sau</a>
+    {% endif %}
+</div>

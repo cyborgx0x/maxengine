@@ -1,106 +1,62 @@
 {% extends "base.html" %}
+{% block title %}{{ post.name }} by {{ author.name }}{% endblock %}
 {% block content%}
 
-<div class="row row-deck row-cards">
-    <div class="col-md-8 ">
-
-        <div class="col-md-4 col-xs-12">
+<div class="row">
+    <div class="col-lg-8 ">
+        <div class="row">
+        <div class="col-md-4">
             <div id="fictionID" data="{{post.id}}"> </div>
             <div id="fictionName" class="card-title">{{ post.name }}</div>
 
             <img id="coverPage" src="{{post.cover}}" alt="..." class="card-img-top">
-            <!-- <div id="like_button_container"></div> -->
+
+            <a href="/author/{{ author.name }}" class="btn">
+                <span class="avatar" style="background-image: url({{ author.img }})"></span>
+                {{ author.name }}
+              </a>
 
         </div>
-        <div class="col-md-8 cold-xs-12">
+        <div class="col-md-8">
             <div class="card-body">
 
-                
-                 <h2 class="card-text" id ="author">{{ post.author }}</h2>
+
+            
+               
                 <div class="alert alert-success" role="alert">
                     <h4 class="alert-heading">{% if post.status %} Full {% else %} On Going {% endif %}</h4>
-                    <p>Tác phẩm xuất bản vào năm</p> <p id="publishYear">{{ post.publish_year}}</p>
-                   
-                    <button type="button" class="btn btn-danger" href="{{post.tiki_link}}" onclick="downloadFiction()" id="downloadDiv">
-                    
-                    
-                        <!-- Download SVG icon from http://tabler-icons.io/i/cloud-download -->
-	                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4" /><line x1="12" y1="13" x2="12" y2="22" /><polyline points="9 19 12 22 15 19" /></svg>
-                        Tải về đọc offline
-
-                    </button>
-                    <a type="button" class="btn btn-primary" href="{{post.tiki_link}}" data-toggle="modal" data-target="#exampleModal">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/book -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" />
-                            <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" />
-                            <line x1="3" y1="6" x2="3" y2="19" />
-                            <line x1="12" y1="6" x2="12" y2="19" />
-                            <line x1="21" y1="6" x2="21" y2="19" /></svg>
-                        Đọc tác phẩm online
-                    </a>
-
-                    <!-- <script>
-                        $('#myModal').on('shown.bs.modal', function () {
-                            $('#myInput').trigger('focus')
-                        })
-                    </script> -->
-                    <!-- Modal -->
-                    <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true" >
-                        <div class="modal-dialog modal-lg" role="document" style="overflow-y: initial !important" id="mainViewer">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <div id="currentChapter" data="{{chapter.chapter_order}}"></div>
-                                    <a href="/{{ post.id }}/{{ chapter.chapter_order}}}"><h5 class="modal-title" id="exampleModalLabel">{{chapter.name}}</h5></a>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body" style="color: #000; white-space: pre-line;  height: 80vh;
-                                overflow-y: auto;" id="viewerContent">
-                                    {{chapter.content}}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" onclick="toPreChapter()">Chương Trước</button>
-                                    <button type="button" class="btn btn-warning" onclick="loadnewContent()">Danh Sách</button>
-                                    <button type="button" class="btn btn-primary" onclick="toNextChapter()">Chương Sau</button>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <p>Tác phẩm xuất bản vào năm {{ post.publish_year}}</p>
                     <hr>
-                    <p class="mb-0">Số trang {{ post.page_count }}</p>
+                    <p class="card-text">
+                        Tổng số lượt đọc cộng dồn theo chương: <b>{{post.view}}</b>
+                     </p>
+                    <p class="mb-0">Số chương <b>{{ post.chapter_count }}</b></p>
                 </div>
-                <a type="button" class="btn btn-success" href="{{ post.mediafire_link }}">
+                <button type="button" class="btn btn-success" href="{{ post.mediafire_link }}">
                     <!-- Download SVG icon from http://tabler-icons.io/i/download -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                        <polyline points="7 11 12 16 17 11" />
-                        <line x1="12" y1="4" x2="12" y2="16" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4" /><line x1="12" y1="13" x2="12" y2="22" /><polyline points="9 19 12 22 15 19" /></svg>
+
                     Tải ebook {{ post.name }}
-                </a>
+                </button>
                 <br>
 
                 <div class="card-text" style="white-space: pre-line" id="detailInfomation"> {{post.desc}} </div>
-                <p class="card-text">
-
-                </p>
-                <p class="card-text"><small class="text-muted">{{post.view}} views</small></p>
+                
+                
 
             </div>
         </div>
-
+        </div>
+        
     </div>
 
-    <div class="col-md-4">
+    <div class="col-lg-4">
+
+          <h2>Danh sách chương</h2>
+          {% for chapter in chapters %}
+          {% include '_chapter_list.html'  %}   
+           
+          {% endfor %}
         {% if quote %}
         <div>
             <div class="card-header">

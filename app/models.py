@@ -12,7 +12,6 @@ class Fiction(db.Model):
     __tablename__ = "fiction"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Unicode(300))
-    author = db.Column(db.Unicode(300))
     status = db.Column(db.Boolean)
     view = db.Column(db.Integer)
     desc = db.Column(db.Text)
@@ -22,6 +21,16 @@ class Fiction(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     tiki_link = db.Column(db.Text)
     mediafire_link = db.Column(db.Text)
+    slug = db.Column(db.String(160))
+    version = db.Column(db.Integer)
+    chapter_count = db.Column(db.Integer)
+    quote_count = db.Column(db.Integer)
+    def set_count(self, chapter_count):
+        self.chapter_count = chapter_count
+        print("update completed")    
+    def set_view(self, total_view):
+        self.view = total_view
+        print("update completed")    
 
     def __repr__(self):
         return 'Fiction info {}>'.format(self.name)
@@ -35,6 +44,13 @@ class Chapter(db.Model):
     view_count = db.Column(db.Integer)
     fiction = db.Column(db.Integer, db.ForeignKey('fiction.id'))
     chapter_order = db.Column(db.Integer)
+    def update_view(self):
+        if self.view_count:
+            self.view_count=self.view_count+1
+        else:
+            self.view_count = 1
+        print(self.id, self.name, self.view_count)
+        db.session.commit()
 
 
 class Author(db.Model):
@@ -42,6 +58,19 @@ class Author(db.Model):
     name = db.Column(db.String(160))
     birth_year = db.Column(db.Integer)
     author_page = db.Column(db.String(160))
+    view = db.Column(db.Integer)
+    fiction = db.relationship('Fiction', backref ='fiction', lazy='dynamic')
+    email = db.Column('email', db.String(120))
+    img = db.Column(db.String(240))
+    fiction_count = db.Column(db.Integer)
+    def set_count(self, fiction_number):
+        self.fiction_count = fiction_number
+        print("update completed")
+    def update_fiction_count(self):
+        fiction_number = Fiction.query.filter_by(author_id=self.id).count()  
+        self.fiction_count = fiction_number
+        print (self.name, fiction_number)
+        db.session.commit()
 
 class Quote(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

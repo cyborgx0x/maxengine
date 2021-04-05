@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %} All Fictions{% endblock %}
+{% block content%}
+<div class="row row-deck">
+    
+  {% for fiction in fictions %}
+  <div class="col-xl-2 col-sm-4">
+
+  {% include '_fiction.html'  %}   
+  </div>
+{% endfor %}
+</div>
+
+{% endblock %}

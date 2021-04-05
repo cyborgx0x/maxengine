@@ -17,25 +17,65 @@ from database import view_all_post
 def index():
     return  render_template("space.html")
 
-@app.route("/post")
-def all_post():
-    fiction = Fiction.query.all()
-    return  render_template("post.html", fiction = fiction)
 
-@app.route("/post/<int:fiction_id>/")
+@app.route("/author/<author_name>")
+def author_page(author_name):
+    author = Author.query.filter_by(name=author_name).first()
+    fictions = Fiction.query.filter_by(author_id=author.id)
+    return render_template("author.html", author = author, fictions =fictions)
+
+@app.route("/authors/")
+def all_authors():
+    authors = Author.query.all()
+    return render_template("authors.html", authors = authors)
+
+
+@app.route("/fictions")
+def fictions():
+    fictions = Fiction.query.all()
+    return  render_template("fictions.html", fictions = fictions)
+
+@app.route("/fiction/<int:fiction_id>/")
 def specific_post(fiction_id):
     fiction = Fiction.query.filter_by(id=fiction_id).first()
+    author = Author.query.filter_by(id=fiction.author_id).first()
     chapter = Chapter.query.filter_by(fiction=fiction_id).first()
-    quote = Quote.query.filter_by(fiction=fiction_id)
-    return  render_template("viewer.html", post = fiction, chapter = chapter, quote = quote)
 
-@app.route("/<int:fiction_id>/<int:chapter_id>")
-def chapter_viewer(chapter_id, fiction_id):
-    chapter_view = Chapter.query.filter_by(id=chapter_id).first()
-    fiction = Fiction.query.filter_by(id=fiction_id).first()
-    current = chapter_view.chapter_order
+    chapters = Chapter.query.filter_by(fiction=fiction_id)
+    quote = Quote.query.filter_by(fiction=fiction_id)
+    return  render_template("viewer.html", post = fiction, chapters = chapters, quote = quote, author =author, chapter=chapter)
+
+@app.route("/fiction/<fiction_name>/")
+def specific_fiction_name(fiction_name):
+    fiction = Fiction.query.filter_by(name=fiction_name).first()
+    author = Author.query.filter_by(id=fiction.author_id).first()
+    chapters = Chapter.query.filter_by(fiction=fiction.id)
+    quote = Quote.query.filter_by(fiction=fiction.id)
+    return  render_template("viewer.html", post = fiction, chapters = chapters, quote = quote, author =author)
+
+
+@app.route("/chapter/<int:chapter_id>/")
+def chapter_viewer(chapter_id):
+    chapter = Chapter.query.filter_by(id=chapter_id).first()
+    chapter.update_view()
+    fiction = Fiction.query.filter_by(id=chapter.fiction).first()
+    chapters = Chapter.query.filter_by(fiction=fiction.id)
+    plus = chapter.chapter_order+1
+    minus = chapter.chapter_order-1
     
-    return render_template('chapter.html', post = chapter_view, fiction=fiction)
+    try:
+        next_chapter = Chapter.query.filter_by(chapter_order=plus, fiction = fiction.id).first()
+        nct = next_chapter.id
+    except:
+        nct = None
+    
+    try:
+        previous_chapter = Chapter.query.filter_by(chapter_order=minus, fiction = fiction.id).first()
+        pre = previous_chapter.id
+    except:
+        pre = None
+
+    return render_template('chapter.html', chapter = chapter, fiction=fiction, chapters = chapters, next_chapter = nct, previous_chapter = pre)
 
 @app.route("/api/<int:fiction_id>/", methods = ['GET'])
 def api_send_fiction(fiction_id):

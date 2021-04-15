@@ -1,8 +1,9 @@
 
-<div class="card" style="margin:10px">
-  <img src="{{fiction.cover}}" alt="">
+<div class="card" style="margin:5px">
+  <img src="{% if fiction.cover %}{{ fiction.cover}}{% else %} http://localhost/upload/sample.jpg{% endif %}" alt="">
   <div class="card-body">
     <h3 class="card-title"><a href="/fiction/{{fiction.id}}">{{fiction.name}}</a></h3>
+    <p>{{fiction.view}} lượt đọc</p>
   </div>
 </div>
 

@@ -1,15 +1,12 @@
 {% extends "base.html" %}
-{% block title %}{{ post.name }} by {{ author.name }}{% endblock %}
+{% block title %}{{ fiction.name }} by {{ author.name }}{% endblock %}
 {% block content%}
 
 <div class="row">
     <div class="col-lg-8 ">
         <div class="row">
         <div class="col-md-4">
-            <div id="fictionID" data="{{post.id}}"> </div>
-            <div id="fictionName" class="card-title">{{ post.name }}</div>
-
-            <img id="coverPage" src="{{post.cover}}" alt="..." class="card-img-top">
+            {% include "_fiction.html"  %}
 
             <a href="/author/{{ author.name }}" class="btn">
                 <span class="avatar" style="background-image: url({{ author.img }})"></span>
@@ -24,23 +21,22 @@
             
                
                 <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">{% if post.status %} Full {% else %} On Going {% endif %}</h4>
-                    <p>Tác phẩm xuất bản vào năm {{ post.publish_year}}</p>
+                    <h4 class="alert-heading">{% if fiction.status %} Full {% else %} On Going {% endif %}</h4>
+                    <p>Tác phẩm xuất bản vào năm {{ fiction.publish_year}}</p>
                     <hr>
                     <p class="card-text">
-                        Tổng số lượt đọc cộng dồn theo chương: <b>{{post.view}}</b>
+                        Tổng số lượt đọc cộng dồn theo chương: <b>{{fiction.view}}</b>
                      </p>
-                    <p class="mb-0">Số chương <b>{{ post.chapter_count }}</b></p>
+                    <p class="mb-0">Số chương <b>{{ fiction.chapter_count }}</b></p>
                 </div>
-                <button type="button" class="btn btn-success" href="{{ post.mediafire_link }}">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/download -->
+                <!-- <button type="button" class="btn btn-success" href="{{ fiction.mediafire_link }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4" /><line x1="12" y1="13" x2="12" y2="22" /><polyline points="9 19 12 22 15 19" /></svg>
 
-                    Tải ebook {{ post.name }}
-                </button>
-                <br>
+                    Tải ebook {{ fiction.name }}
+                </button> -->
+                <hr>
 
-                <div class="card-text" style="white-space: pre-line" id="detailInfomation"> {{post.desc}} </div>
+                <div class="card-text" id="detailInfomation"> {{fiction.desc | safe}} </div>
                 
                 
 

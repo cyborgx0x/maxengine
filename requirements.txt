@@ -27,6 +27,6 @@ urllib3
 webencodings
 Werkzeug
 WTForms
-mysqlclient
 flask-login
 email-validator
+python-dotenv

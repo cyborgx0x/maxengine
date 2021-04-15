@@ -5,14 +5,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 from hashlib import md5
+from dataclasses import dataclass
 meta = MetaData()
 
+
+@dataclass
 class Fiction(db.Model):
     'fiction', meta
+    id: int
+    name: str
+    desc: str
+    cover: str
+
     __tablename__ = "fiction"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Unicode(300))
-    status = db.Column(db.Boolean)
+    status = db.Column(db.Boolean,  default = True)
     view = db.Column(db.Integer)
     desc = db.Column(db.Text)
     cover = db.Column(db.Text)
@@ -25,6 +33,8 @@ class Fiction(db.Model):
     version = db.Column(db.Integer)
     chapter_count = db.Column(db.Integer)
     quote_count = db.Column(db.Integer)
+    chapter = db.relationship('Chapter')
+
     def set_count(self, chapter_count):
         self.chapter_count = chapter_count
         print("update completed")    
@@ -36,8 +46,12 @@ class Fiction(db.Model):
         return 'Fiction info {}>'.format(self.name)
 
 
-
+@dataclass
 class Chapter(db.Model):
+    id:int
+    name: str
+    content: str
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(160))
     content = db.Column(db.Text)
@@ -51,15 +65,24 @@ class Chapter(db.Model):
             self.view_count = 1
         print(self.id, self.name, self.view_count)
         db.session.commit()
+    def update_chapter_count_zero(self, count):
+        self.view_count = count
+        db.session.commit()
 
 
+@dataclass
 class Author(db.Model):
+    id: int
+    name: str 
+    img: str
+    fiction: Fiction
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(160))
     birth_year = db.Column(db.Integer)
     author_page = db.Column(db.String(160))
     view = db.Column(db.Integer)
-    fiction = db.relationship('Fiction', backref ='fiction', lazy='dynamic')
+    fiction = db.relationship('Fiction', backref ='fiction')
     email = db.Column('email', db.String(120))
     img = db.Column(db.String(240))
     fiction_count = db.Column(db.Integer)

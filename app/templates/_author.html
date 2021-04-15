@@ -1,7 +1,7 @@
-<div class="card">
-    <div class="card-img-top img-responsive img-responsive-16by9" style="background-image: url({{ author.img }})"></div>
+<div class="card" style="margin:5px">
+    <div class="card-img-top img-responsive img-responsive-16by9" style="background-image: url({% if author.img %}{{ author.img}}{% else %} http://localhost/upload/sample.jpg{% endif %})"></div>
     <div class="card-body">
-        <a href="/author/{{ author.name}}"><h3 class="card-title">Author: {{ author.name}}</h3>
+        <a href="/author/{{ author.name}}"><h3 class="card-title">{{ author.name}}</h3>
         </a>
         <p>Birth Year: {{ author.birth_year}}</p>
         <p>Link: {{ author.author_page}}</p>

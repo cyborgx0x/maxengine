@@ -5,4 +5,6 @@ from app.models import Fiction, User, Author
 def make_shell_context():
     return {'db': db, 'Fiction': Fiction, 'User':User,  'Author': Author}
 
-
+if __name__=="__main__":
+    print("starting flask")
+    app.run()

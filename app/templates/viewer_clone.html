@@ -5,8 +5,15 @@
 <div class="row">
     <div class="col-lg-8 ">
         <div class="row">
-        <div class="col-4 col-md-4">
-            {% include "_fiction.html"  %}
+        <div class="col-md-4">
+            
+            <div class="card" style="margin:5px">
+                <img src="{% if fiction.cover %}{{ fiction.cover}}{% else %} http://localhost/upload/sample.jpg{% endif %}" alt="">
+                <div class="card-body">
+                <h3 class="card-title" contenteditable="true">{{fiction.name}}</h3>
+                <p contenteditable="true">{{fiction.view}} lượt đọc</p>
+                </div>
+            </div>
 
             <a href="/author/{{ author.name }}" class="btn">
                 <span class="avatar" style="background-image: url({{ author.img }})"></span>
@@ -14,7 +21,7 @@
               </a>
 
         </div>
-        <div class="col-8 col-md-8">
+        <div class="col-md-8">
             <div class="card-body">
                 <div class="alert alert-success" role="alert">
                     <h4 class="alert-heading">{% if fiction.status %} Full {% else %} On Going {% endif %}</h4>
@@ -95,15 +102,12 @@
 
     <div class="col-lg-4">
         {% if editable %}
-        
         {% else %}
-        <div class="card">
           <h2>Danh sách chương</h2>
           {% for chapter in chapters %}
           {% include '_chapter_list.html'  %}   
            
           {% endfor %}
-        </div>
         {% if quote %}
         <div>
             <div class="card-header">

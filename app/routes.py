@@ -3,7 +3,7 @@ from flask import render_template
 from flask import request, redirect
 from app.models import Fiction, Chapter, Quote, Author
 from app import app
-from app.form import LoginForm, RegistrationForm, Quiz_answer
+from app.form import LoginForm, RegistrationForm, Quiz_answer, AuthorForm, FictionForm
 from flask import flash, url_for
 from flask_login import current_user, login_user
 from app.models import User
@@ -12,18 +12,49 @@ from werkzeug.urls import url_parse
 from app import db
 from flask import Markup
 from database import view_all_post
+import json
 
 @app.route("/")
 def index():
-    top_view_fictions = Fiction.query.order_by(Fiction.view.desc()).limit(10).all()
-    top_authors = Author.query.order_by(Author.fiction_count.desc()).limit(10).all()
+    top_view_fictions = Fiction.query.order_by(Fiction.view.desc()).limit(12).all()
+    top_authors = Author.query.order_by(Author.fiction_count.desc()).limit(12).all()
     
     return  render_template("home.html", top_view_fictions = top_view_fictions, top_authors=top_authors)
 
-@app.route("/test")
+@app.route("/test/new/", methods=['GET', 'POST'])
 def test():
-    test_items = Author.query.all()
-    return  jsonify(test_items)
+    form = AuthorForm()
+    if form.validate_on_submit():
+        author = Author(name=form.author_name.data, img=form.img.data, about=form.about.data)
+        db.session.add(author)
+        db.session.commit()
+        flash('New Author created')
+        return redirect(url_for('test'))  
+    print (form.errors)   
+    return  render_template("test.html", form=form)
+
+
+@app.route("/test/new-fiction/", methods=['GET', 'POST'])
+def new_fiction():
+    form = FictionForm()
+    if form.validate_on_submit():
+        desc = { 
+            "time": 1618735370183,
+            "blocks": [
+                {
+                "type": "paragraph",
+                "data": {"text": form.desc.data}
+                }
+            ],
+            "version": "2.20.1",
+        }
+        new_fiction=Fiction(name=form.name.data, cover=form.cover.data, desc=str(desc))
+        db.session.add(new_fiction)
+        db.session.commit()
+        db.session.refresh(new_fiction)
+        flash("Data is saved")
+        return redirect(url_for("edit_specific_post", fiction_id=new_fiction.id))
+    return  render_template("new_fiction.html", form=form)
 
 @app.route("/author/<author_name>")
 def author_page(author_name):
@@ -48,9 +79,29 @@ def specific_post(fiction_id):
     author = Author.query.filter_by(id=fiction.author_id).first()
     chapter = Chapter.query.filter_by(fiction=fiction_id).first()
 
+    dsc = fiction.desc
     chapters = Chapter.query.filter_by(fiction=fiction_id).limit(10)
     quote = Quote.query.filter_by(fiction=fiction_id)
-    return  render_template("viewer.html", fiction = fiction, chapters = chapters, quote = quote, author =author, chapter=chapter)
+    return  render_template("viewer.html", fiction = fiction, chapters = chapters, quote = quote, author =author, chapter=chapter, dsc=dsc)
+
+
+@app.route("/fiction/<int:fiction_id>/edit", methods=['GET', 'POST'])
+def edit_specific_post(fiction_id):
+    fiction = Fiction.query.filter_by(id=fiction_id).first()
+    author = Author.query.filter_by(id=fiction.author_id).first()
+    chapter = Chapter.query.filter_by(fiction=fiction_id).first()
+    editable = True
+    chapters = Chapter.query.filter_by(fiction=fiction_id).limit(10)
+    quote = Quote.query.filter_by(fiction=fiction_id)
+    if request.method == 'POST':
+        incoming_data= json.loads(request.data.decode('UTF=8'))
+        fiction.name = str(incoming_data['title'])
+        fiction.desc = str(incoming_data['desc'])
+        print(fiction.name, fiction.desc )
+        db.session.commit()
+        flash("Data saved")
+    return  render_template("viewer_clone.html", fiction = fiction, chapters = chapters, quote = quote, author =author, chapter=chapter, editable=editable)
+
 
 @app.route("/fiction/<fiction_name>/")
 def specific_fiction_name(fiction_name):

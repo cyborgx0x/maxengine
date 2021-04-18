@@ -76,11 +76,13 @@ class Author(db.Model):
     name: str 
     img: str
     fiction: Fiction
+    about: str
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(160))
     birth_year = db.Column(db.Integer)
     author_page = db.Column(db.String(160))
+    about = db.Column(db.Text)
     view = db.Column(db.Integer)
     fiction = db.relationship('Fiction', backref ='fiction')
     email = db.Column('email', db.String(120))

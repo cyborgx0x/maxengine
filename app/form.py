@@ -1,7 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField,  BooleanField, SubmitField, RadioField
+from wtforms import StringField, PasswordField,  BooleanField, SubmitField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
+
+class FictionForm(FlaskForm):
+    name = StringField('Fiction Name', validators=[DataRequired()])
+    cover = StringField('Cover', validators=[DataRequired()])
+    desc = StringField('Description', validators=[DataRequired()])
+    submit =  SubmitField('Save')
+
+
+
+class AuthorForm(FlaskForm):
+    author_name = StringField('Author Name', validators=[DataRequired()])
+    img = StringField('img link', validators=[DataRequired()])
+    about = StringField('About', validators=[DataRequired()])
+    submit =  SubmitField('Save')
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

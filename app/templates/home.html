@@ -132,24 +132,21 @@
   </div>
 </div>
 <hr>
-<div class="row row-deck">
-  <h1>Top 10 Authors</h1>
-
-    {% for author in top_authors %}
-
-    <div class="col-md-2">
-        {% include '_author.html'  %}   
-    </div>
-  
-    {% endfor %}
 
 
+
+
+<div class="row row-cards">
+  <h1>Top Authors of the week</h1>
+  {% for author in top_authors %}
+  <div class="col-6 col-md-3">  {% include '_homeitemauthor.html'  %}   </div>
+  {% endfor %}
 </div>
 <hr>
 <div class="row row-deck">
-    <h1>Top 10 Fictions by Views</h1>
+    <h1>Featuring Fiction</h1>
     {% for fiction in top_view_fictions %}
-    <div class="col-md-2">  {% include '_fiction.html'  %}   </div>
+    <div class="col-6 col-md-3">  {% include '_fiction.html'  %}   </div>
     {% endfor %}
   </div>
   

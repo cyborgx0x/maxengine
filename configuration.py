@@ -3,7 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    SQLALCHEMY_DATABASE_URI =  os.environ.get('DATABASE')
+    SQLALCHEMY_DATABASE_URI =  'mysql+mysqlconnector://root:@localhost:3306/lucasviewer'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     

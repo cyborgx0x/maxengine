@@ -239,6 +239,11 @@ def new_chapter(fiction_id):
         return redirect(url_for('chapter_viewer', chapter_id=new_chapter.id))
     return render_template('new_chapter.html', form=form)
 
+@app.route("/api/all_authors/", methods = ['GET'])
+def api_all_authors():
+    authors=Author.query.all()
+    return jsonify(authors)
+
 @app.route("/api/<int:fiction_id>/", methods = ['GET'])
 def api_send_fiction(fiction_id):
     fiction = Fiction.query.filter_by(id=fiction_id).first()

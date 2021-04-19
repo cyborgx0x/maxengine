@@ -4,15 +4,33 @@
 
 <div class="row justify-content-start">
     <div class="col-md-4">
-        {% include '_author.html'  %}   
+        {% include '_author.html'  %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Editable">
+            Edit this author
+        </button>
+        <div class="modal fade" id="Editable" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        {% include '_formeditauthor.html'  %} 
+        </div>
+        <a href="/author/{{author.id}}/delete" type="button" class="btn">Delete this author</a> 
     </div>
     
     <div class="col-md-8 card">
-        
+        <div class="card-body" id="authorInformation">  </div>
+                    <script>
+                        let desc={{ author.about | safe}}
+                        let par = document.getElementById('authorInformation')
+                        for (i in desc.blocks) {
+                            let para = document.createElement('p')
+                            para.innerHTML=desc.blocks[i].data.text
+                            par.appendChild(para)
+                        }
+                    </script>
 <div class="row row-deck">
+
     {% for fiction in fictions %}
 
-    <div class="col-md-4">
+    <div class="col-6 col-md-4">
         {% include '_fiction.html'  %}   
     </div>
 

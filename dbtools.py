@@ -31,8 +31,13 @@ def update_fiction_count():
     authors = Author.query.all()
     for author in authors:
         fiction_number = Fiction.query.filter_by(author_id=author.id).count()  
-        author.set_count(fiction_number)    
-        print (author.name, fiction_number)
+        fics = Fiction.query.filter_by(author_id=author.id)
+        total_view=0
+        for fic in fics:
+            total_view += fic.view
+        author.fiction_count = fiction_number
+        author.view = total_view
+        print (author.name, fiction_number, total_view)
     db.session.commit()
     
 def update_fiction_view():
@@ -45,8 +50,8 @@ def update_fiction_view():
         fiction.set_view(total_view)
         print(fiction.name, total_view)
     db.session.commit()
-# update_chapter_count()
-# update_fiction_count()
+update_chapter_count()
+update_fiction_count()
 
 
 def update_chapter_count_begin():
@@ -59,8 +64,10 @@ def update_chapter_count_begin():
         
         print(fiction.name, chapter.view_count)
     db.session.commit()
-# update_chapter_count_begin()
-# update_fiction_view()
+update_chapter_count_begin()
+update_fiction_view()
+
+
 # content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 # fictions = Fiction.query.all()
 # for fiction in fictions:
@@ -95,7 +102,7 @@ def replace_new_line(a,b):
 # b = "</p>"
 # replace_new_line(a,b)
 
-f = Fiction.query.order_by(Fiction.id.desc()).first()
-txt = f.desc
-f.desc = txt.replace("\r\n","</p><p>")
-db.session.commit()
+# f = Fiction.query.order_by(Fiction.id.desc()).first()
+# txt = f.desc
+# f.desc = txt.replace("\r\n","</p><p>")
+# db.session.commit()

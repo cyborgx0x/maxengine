@@ -32,8 +32,17 @@
                 </button> -->
                 <hr>
                 <div class="card-body">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Editable">
+                        Edit
+                    </button>
+                    <div class="modal fade" id="Editable" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    {% include '_formeditfiction.html'  %} 
+                    </div>
+                    <a href="{{url_for("edit_specific_post", fiction_id=fiction.id)}} ">Edit</a>
+                    <a href="{{url_for("delete_fiction", fiction_id=fiction.id)}}" type="button" class="btn">Delete this fiction</a>
                     {% if editable %}
-
+                    
                     <button id="saveButton" class="btn btn-success">
                         <!-- Download SVG icon from http://tabler-icons.io/i/send -->
     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="10" y1="14" x2="21" y2="3" /><path d="M21 3l-6.5 18a0.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a0.55 .55 0 0 1 0 -1l18 -6.5" /></svg>
@@ -84,6 +93,7 @@
                         }
                     </script>
                     {% endif %}
+                    
                 </div>
                 
 
@@ -98,16 +108,22 @@
         
         {% else %}
         <div class="card">
-          <h2>Danh sách chương</h2>
-          {% for chapter in chapters %}
-          {% include '_chapter_list.html'  %}   
-           
-          {% endfor %}
+            <div class="card-header">Danh sách chương </div>
+            <div class="card-body">
+                
+                <a href="{{url_for('new_chapter', fiction_id=fiction.id)}}" class="dropdown-item btn" type="button">Create New Chapter</a>
+                {% for chapter in chapters %}
+                {% include '_chapter_list.html'  %}   
+                    
+                {% endfor %}
+            </div>
         </div>
         {% if quote %}
-        <div>
+        <div class="card">
             <div class="card-header">
-                Trích dẫn từ tác phẩm
+               
+                    Được trích dẫn 
+               
             </div>
             {% for q in quote %}
 

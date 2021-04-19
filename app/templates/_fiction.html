@@ -1,9 +1,20 @@
-
-<div class="card" style="margin:5px">
-  <img src="{% if fiction.cover %}{{ fiction.cover}}{% else %} http://localhost/upload/sample.jpg{% endif %}" alt="">
+<div class="card" style="margin:5px" >
+  <div class="crop">
+  
+    <img src="{% if fiction.cover %}{{url_for('img_proxy', link=fiction.cover)}}{% else %} http://localhost/upload/sample.jpg{% endif %}" alt="{{fiction.name}}">
+  </div>
+  
   <div class="card-body">
-    <h3 class="card-title"><a href="/fiction/{{fiction.id}}">{{fiction.name}}</a></h3>
+    <h5 class="card-title"><a href="/fiction/{{fiction.id}}">{{fiction.name}}</a></h5>
     <p>{{fiction.view}} lượt đọc</p>
+  </div>
+  <div class="d-flex">
+    <a href="/fiction/{{fiction.id}}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+    </a>
+    <a href="/fiction/{{fiction.id}}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/bookmark -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2" /></svg>
+    </a>
   </div>
 </div>
 

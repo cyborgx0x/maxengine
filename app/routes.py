@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask import render_template
 from flask import request, redirect
-from app.models import Fiction, Chapter, Quote, Author
+from app.models import Fiction, Chapter, Quote, Author, FictionIndex
 from app import app
 from app.form import LoginForm, RegistrationForm, Quiz_answer, AuthorForm, FictionForm, ChapterForm
 from flask import flash, url_for, send_file
@@ -23,6 +23,14 @@ def index():
     
     return  render_template("home.html", top_view_fictions = top_view_fictions, top_authors=top_authors)
 
+@app.route("/test/search/", methods=['GET', 'POST'])
+def test_search():
+    return render_template('search.html')
+
+@app.route("/build_indexing/")
+def build_indexing():
+    fictions=FictionIndex.query.all()
+    return jsonify(fictions)
 
 @app.route("/img-cover/<path:link>")
 def img_proxy(link):

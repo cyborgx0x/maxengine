@@ -19,6 +19,7 @@
   <!-- <script src="https://unpkg.com/@tabler/core@1.0.0-beta/dist/js/tabler.min.js"></script> -->
   <link rel="stylesheet" href="https://unpkg.com/@tabler/core@1.0.0-beta/dist/css/tabler.min.css">
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
   <style>
 
     .card:hover {
@@ -135,6 +136,96 @@
     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     {% include '_form.html'  %} 
   </div>
+        
+<div class="input-icon" style="margin: 10;">
+  <span class="input-icon-addon">
+    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+  </span>
+  <input id="searchbar" type="text" placeholder="Nhập từ khóa cần tìm kiếm" aria-placeholder="Bất cứ từ khóa nào" class="form-control"/>
+  
+</div>
+<div id="searchresult"class="row row-card"></div>
+<script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+  var indexfile =  getindexing('http://127.0.0.1:5000/build_indexing/')
+  async function getindexing(url) {
+      return (
+          axios.get(url).then(function(response) {
+          return response.data;
+      })).then(function(data){
+         console.log(data)
+          var idx = lunr( function () {
+          this.ref('id')
+          this.field('desc')
+          this.field('name')
+          this.field('cover')
+          
+          data.forEach(function (doc) {
+              this.add(doc)
+          }, this)
+          })
+
+          function createCover(src, alt, parents) {
+              let cover = document.createElement('img')
+              cover.src = "http://127.0.0.1:5000/img-cover/"+src
+              cover.alt = alt
+              parents.appendChild(cover)
+          }
+          function createCardBody(href, text, parents) {
+            let displaysearch = document.createElement('div')
+            displaysearch.className="card-body"
+            let header = document.createElement('h5')
+            header.className = "card-title"
+            let link = document.createElement('a')
+            link.href =  href
+            link.textContent = text
+            header.appendChild(link)
+            displaysearch.appendChild(header)
+            parents.appendChild(displaysearch)
+          }
+          function createParent(main) {
+            let finalcard = document.createElement('div')
+            finalcard.className="col-3"
+            let parents = document.createElement('div')
+            parents.className = "card"
+            document.getElementById(main).appendChild(finalcard)
+            finalcard.appendChild(parents)
+            return parents
+          }
+          console.log(idx)
+          searchbar = document.getElementById('searchbar')
+          var keyword;
+          searchbar.addEventListener('input', function(e) {
+              keyword=e.target.value
+              document.getElementById('searchresult').innerHTML=''
+              var search = idx.search(keyword)
+              search.forEach(function(searchresult) {
+              console.log(searchresult)
+              
+              var indexitem;
+              data.forEach(function(index) {
+                  if (index.id == searchresult.ref) {
+                      indexitem = index;
+                  }
+              })
+              let href="/fiction/" + searchresult.ref;
+              let text = indexitem.name
+              let parents = createParent('searchresult')
+              createCover(indexitem.cover, indexitem.name, parents)
+              createCardBody(href,text, parents)
+              
+              })
+          })
+          
+      })
+  }
+  
+
+</script>
+
         {% block content %}{% endblock %}
       </div>
     </div>

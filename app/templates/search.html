@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block nav %}
+{% endblock %}
+
+{% block content%}
+
+<div>
+    <input id="searchbar" type="text" placeholder="Nhập từ khóa cần tìm kiếm" aria-placeholder="Bất cứ từ khóa nào" class="form-control"/>
+    <div id="searchresult"class="row row-card"></div>
+</div>
+<script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+    var indexfile =  getindexing('http://127.0.0.1:5000/build_indexing/')
+    async function getindexing(url) {
+        return (
+            axios.get(url).then(function(response) {
+            return response.data;
+        })).then(function(data){
+           console.log(data)
+            var idx = lunr( function () {
+            this.ref('id')
+            this.field('desc')
+            this.field('name')
+            this.field('cover')
+            
+            data.forEach(function (doc) {
+                this.add(doc)
+            }, this)
+            })
+
+            function createCover(src, alt, parents) {
+                cover = document.createElement('img')
+                cover.src = src
+                cover.alt = alt
+                parents.appendChild(cover)
+            }
+            console.log(idx)
+            searchbar = document.getElementById('searchbar')
+            var keyword;
+            searchbar.addEventListener('change', function(e) {
+                keyword=e.target.value
+                document.getElementById('searchresult').innerHTML=''
+                var search = idx.search(keyword)
+                search.forEach(function(searchresult) {
+                console.log(searchresult)
+                var displaysearch = document.createElement('a')
+                displaysearch.href="/fiction/" + searchresult.ref
+                var indexitem;
+                data.forEach(function(index) {
+                    if (index.id == searchresult.ref) {
+                        indexitem = index;
+                    }
+    
+                })
+                displaysearch.textContent=indexitem.name
+                parents = document.createElement('div')
+                parents.className = "card col-3"
+                
+                document.getElementById('searchresult').appendChild(parents)
+                createCover(indexitem.cover, indexitem.name, parents)
+                parents.appendChild(displaysearch)
+                })
+            })
+            
+        })
+    }
+    
+
+</script>
+
+{% endblock %}

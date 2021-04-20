@@ -8,7 +8,6 @@ from hashlib import md5
 from dataclasses import dataclass
 meta = MetaData()
 
-
 @dataclass
 class Fiction(db.Model):
     'fiction', meta
@@ -46,6 +45,13 @@ class Fiction(db.Model):
         return 'Fiction info {}>'.format(self.name)
 
 
+@dataclass
+class FictionIndex(Fiction):
+    id:int
+    name: str
+    desc: str 
+
+    
 @dataclass
 class Chapter(db.Model):
     id:int

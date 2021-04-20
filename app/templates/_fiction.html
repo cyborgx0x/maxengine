@@ -8,13 +8,71 @@
     <h5 class="card-title"><a href="/fiction/{{fiction.id}}">{{fiction.name}}</a></h5>
     <p>{{fiction.view}} lượt đọc</p>
   </div>
-  <div class="d-flex">
-    <a href="/fiction/{{fiction.id}}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+  <div class="d-flex" id="fulldiv">
+
+    <button type="button" class="btn card-btn" id="{{fiction.id}}" onclick="got_{{fiction.id}}_Like()"><!-- Download SVG icon from http://tabler-icons.io/i/heart -->
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-    </a>
+    </button>
+    
     <a href="/fiction/{{fiction.id}}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/bookmark -->
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2" /></svg>
     </a>
+ 
+    
+      <script>
+        var status_{{fiction.id}}=0;
+        let inact_{{fiction.id}} = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#ff3333" fill="#ff3333" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>'
+        let normal_{{fiction.id}} = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>'
+        {% for l in like %}
+        {% if fiction.id  == l.fiction_id %}
+        status_{{fiction.id}}=1;
+        {% else %}
+        {% endif %}
+        {% endfor %}
+        if (status_{{fiction.id}}==1) {
+          console.log('finally love')
+          document.getElementById("{{fiction.id}}").innerHTML=inact_{{fiction.id}}
+        }
+        function got_{{fiction.id}}_Like() {
+          if (status_{{fiction.id}}==1){
+            document.getElementById("{{fiction.id}}").innerHTML=normal_{{fiction.id}} 
+            status_{{fiction.id}}=0
+            let data = {
+              {{fiction.id}}:status_{{fiction.id}}
+            }
+            axios.post('{{url_for("update_like", fiction_id=fiction.id)}}', data)
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          }
+          else {
+            document.getElementById("{{fiction.id}}").innerHTML=inact_{{fiction.id}}
+            status_{{fiction.id}}=1
+            let data = {
+              {{fiction.id}}:status_{{fiction.id}}
+            }
+            axios.post('{{url_for("update_like", fiction_id=fiction.id)}}', data)
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          }
+
+          
+
+        
+        }
+
+      </script>
+    
+
+
+
   </div>
 </div>
 

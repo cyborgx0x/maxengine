@@ -15,6 +15,7 @@ class Fiction(db.Model):
     name: str
     desc: str
     cover: str
+    tag: str
 
     __tablename__ = "fiction"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -33,6 +34,8 @@ class Fiction(db.Model):
     chapter_count = db.Column(db.Integer)
     quote_count = db.Column(db.Integer)
     chapter = db.relationship('Chapter')
+    tag = db.Column(db.Unicode(300))
+    like = db.relationship('Like', backref ='fiction')
 
     def set_count(self, chapter_count):
         self.chapter_count = chapter_count
@@ -110,7 +113,9 @@ class Quote(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     img = db.Column(db.Text)
 
-
+class Like(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    fiction_id = db.Column(db.Integer, db.ForeignKey('fiction.id'), primary_key=True)
 
 class User(UserMixin, db.Model):
     'users', meta
@@ -120,6 +125,7 @@ class User(UserMixin, db.Model):
     user_name = db.Column('user_name', db.String(64))
     email = db.Column('email', db.String(120))
     password_hash = db.Column(db.String(128))
+    like = db.relationship('Like', backref ='user')
     # post = db.relationship('Post', backref ='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column (db.DateTime, default = datetime.utcnow)

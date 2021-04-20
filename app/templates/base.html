@@ -21,9 +21,12 @@
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
   <style>
-
+    :root {
+      --reaction: #ff0000;
+      --white: #ffffff;
+    }
     .card:hover {
-      box-shadow: 0 0 11px rgba(54, 28, 28, 0.2); 
+      box-shadow: 0 0 11px rgba(41, 27, 27, 0.2); 
     }
     .crop {
       object-fit: cover;
@@ -147,10 +150,14 @@
 </div>
 <div id="searchresult"class="row row-card"></div>
 <script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="{{url_for('static', filename='lunr.stemmer.support.js')}}"></script>
+<script src="{{url_for('static', filename='lunr.vi.js')}}"></script> 
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
-  var indexfile =  getindexing('http://127.0.0.1:5000/build_indexing/')
+  var indexfile =  getindexing('{{url_for("build_indexing")}}')
+
   async function getindexing(url) {
       return (
           axios.get(url).then(function(response) {
@@ -158,10 +165,11 @@
       })).then(function(data){
          console.log(data)
           var idx = lunr( function () {
+          this.use(lunr.vi)
           this.ref('id')
           this.field('desc')
           this.field('name')
-          this.field('cover')
+          this.field('tag')
           
           data.forEach(function (doc) {
               this.add(doc)
@@ -189,8 +197,10 @@
           function createParent(main) {
             let finalcard = document.createElement('div')
             finalcard.className="col-3"
+            
             let parents = document.createElement('div')
             parents.className = "card"
+
             document.getElementById(main).appendChild(finalcard)
             finalcard.appendChild(parents)
             return parents
@@ -199,9 +209,11 @@
           searchbar = document.getElementById('searchbar')
           var keyword;
           searchbar.addEventListener('input', function(e) {
-              keyword=e.target.value
-              document.getElementById('searchresult').innerHTML=''
-              var search = idx.search(keyword)
+              let keyword=e.target.value
+              if (keyword == '') {document.getElementById('searchresult').innerHTML=''}
+              else {
+                document.getElementById('searchresult').innerHTML=''
+                var search = idx.search(keyword)
               search.forEach(function(searchresult) {
               console.log(searchresult)
               
@@ -218,6 +230,8 @@
               createCardBody(href,text, parents)
               
               })
+              }
+              
           })
           
       })

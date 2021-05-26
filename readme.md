@@ -1,4 +1,4 @@
 
 # Max Engine
 
-Combine beautifulsoup with flask,...
+combine flask, bs4,... to scape data from internet.

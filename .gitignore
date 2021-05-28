@@ -7,3 +7,6 @@ staticfiles
 db.sqlite3
 getting-started/*
 nenv
+.idea
+.vs
+.vscode

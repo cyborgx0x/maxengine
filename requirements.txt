@@ -30,3 +30,4 @@ WTForms
 email-validator
 python-dotenv
 mysqlclient
+yfinance

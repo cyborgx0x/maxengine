@@ -1,4 +1,4 @@
-import yfinance
+import yfinance as yf
 
 class Symbol():
   def __init__(self, dataframe):

@@ -23,8 +23,8 @@ def index():
 @app.route("/signal")
 def trade_signal():
     symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F", "JPY=X", "AUDUSD=X", "NZDUSD=X", "EURJPY=X","GBPJPY=X", "EURGBP=X", "EURCAD=X"]
-    x = []
+    x = {}
     for s in symbols_list:
         n = get_signal(s)
-        x.append(n)
+        x[s] = n
     return x

@@ -5,10 +5,9 @@ from app import app
 from symbol import get_signal
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg
 import os.path
 
-@app.route("/", methods=["POST","GET"])
+@app.route("/")
 def index():
     symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F", "JPY=X", "AUDUSD=X", "NZDUSD=X", "EURJPY=X","GBPJPY=X", "EURGBP=X", "EURCAD=X"]
     collection = []

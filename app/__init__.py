@@ -1,4 +1,3 @@
-from configuration import Config
 from flask import Flask
 from flask import render_template
 from symbol import get_signal
@@ -9,10 +8,6 @@ import os.path
 
 app = Flask(__name__)
 
-app.config.from_object(Config)
-
-
-
 @app.route("/")
 def index():
     symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F", "JPY=X", "AUDUSD=X", "NZDUSD=X", "EURJPY=X","GBPJPY=X", "EURGBP=X", "EURCAD=X"]
@@ -21,13 +16,6 @@ def index():
         file_name = s + "2Y1D.csv"
         picture = s + "2Y1D" + ".jpg"
         if os.path.exists("app/static/"+picture):
-            collection.append(picture)
-        else:
-            pair = pd.read_csv(file_name, index_col="Date")
-            pair=pair["Close"]
-            plt.figure(num=file_name)
-            plt.plot(pair)
-            plt.savefig("app/static/"+ picture )
             collection.append(picture)
     return  render_template("home.html", picture = collection)
 

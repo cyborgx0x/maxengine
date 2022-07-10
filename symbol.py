@@ -1,10 +1,21 @@
+import matplotlib.pyplot as plt
 import yfinance as yf
 import os.path
 import pandas as pd
+import datetime
+import os
+
 
 class Symbol():
-  def __init__(self, dataframe):
-    self.data = dataframe
+  def __init__(self, symbol, period, interval):
+    self.symbol = symbol
+    self.period = period
+    self.interval =  interval
+    self.file_name = self.symbol + self.period + self.interval + ".csv"
+    self.graph = "app/static/" + self.symbol + self.period + self.interval + ".jpg"
+    self.graph_abs = self.symbol + self.period + self.interval + ".jpg"
+    self.check_time()
+    self.data = self.get_data()
     self.trans_data = self.transfer(self.data)
     self.uptrend = False
     self.downtrend = False
@@ -12,8 +23,10 @@ class Symbol():
     self.sell = False
     self.price = 0
     self.trend(self.trans_data)
+    self.plot()
   def transfer(self, dataframe):
-    f =  dataframe["Close"].to_frame()
+    f =  dataframe[["Close"]].copy()
+    
     f["SMA30"] = f["Close"].rolling(30).mean()
     f["SMA50"] = f["Close"].rolling(50).mean()
     f["SMA100"] = f["Close"].rolling(100).mean()
@@ -28,25 +41,35 @@ class Symbol():
     self.buy = self.price > last_price["SMA200"].item() and self.price < last_price["SMA50"].item() 
     self.sell = self.price < last_price["SMA200"].item() and self.price > last_price["SMA50"].item()
   def plot(self):
-    self.trans_data.plot()
+    if os.path.exists(self.graph):
+      pass
+    else:
+      plt.figure(num=self.graph)
+      plt.title = self.symbol + self.interval
+      plt.plot(self.trans_data)
+      plt.savefig(self.graph)
+  def get_data(self):
+    if os.path.exists(self.file_name):
+      data = pd.read_csv(self.file_name)
+      return data
+    else:
+      data = yf.download(tickers = self.symbol, period = self.period, interval = self.interval)
+      data.to_csv(self.file_name)
+      return data
+  def check_time(self):
+    mtime = os.path.getmtime(self.file_name)
+    mtime = datetime.datetime.fromtimestamp(mtime)
+    if datetime.datetime.now() - mtime > datetime.timedelta(minutes=15):
+        os.remove(self.file_name)
+        os.remove(self.graph)
+        print("Removing old Data")
 
-def cached(symbol, period, interval):
-  file_name = symbol + period + interval + ".csv"
-  if os.path.exists(file_name):
-    data = pd.read_csv(file_name)
-    return data
-  else:
-    data = yf.download(tickers = symbol, period = period, interval = interval)
-    data.to_csv(file_name)
-    return data
+
 
 def get_signal(symbol):
-  daily = cached(symbol,"2Y", "1D")
-  hour = cached(symbol,"20D", "60m")
-  fifteen = cached(symbol,"5D", "15m")
-  daily_dt = Symbol(daily)
-  hour_dt = Symbol(hour)
-  fif_dt = Symbol(fifteen)
+  daily_dt = Symbol(symbol, "2Y", "1D")
+  hour_dt = Symbol(symbol, "20D", "60m")
+  fif_dt = Symbol(symbol, "5D", "15m")
   buy =  daily_dt.uptrend and fif_dt.uptrend and fif_dt.buy
   sell = daily_dt.downtrend and fif_dt.downtrend and fif_dt.sell
   if buy:
@@ -67,3 +90,8 @@ def get_signal(symbol):
         "signal": "none",
         "price": fif_dt.price,
     }
+symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F", "JPY=X", "AUDUSD=X", "NZDUSD=X", "EURJPY=X","GBPJPY=X", "EURGBP=X", "EURCAD=X"]
+x = []
+for s in symbols_list:
+    n = get_signal(s)
+    print(n)

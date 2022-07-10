@@ -10,7 +10,7 @@ import datetime
 
 @app.route("/")
 def index():
-    symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F", "JPY=X", "AUDUSD=X", "NZDUSD=X", "EURJPY=X","GBPJPY=X", "EURGBP=X", "EURCAD=X"]
+    symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F"]
     collection = []
     for s in symbols_list:
         daily_dt = Symbol(s, "2Y", "1D")

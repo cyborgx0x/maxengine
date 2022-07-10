@@ -1,4 +1,6 @@
 import yfinance as yf
+import os.path
+import pandas as pd
 
 class Symbol():
   def __init__(self, dataframe):
@@ -28,13 +30,20 @@ class Symbol():
   def plot(self):
     self.trans_data.plot()
 
+def cached(symbol, period, interval):
+  file_name = symbol + period + interval + ".csv"
+  if os.path.exists(file_name):
+    data = pd.read_csv(file_name)
+    return data
+  else:
+    data = yf.download(tickers = symbol, period = period, interval = interval)
+    data.to_csv(file_name)
+    return data
+
 def get_signal(symbol):
-  daily = yf.download(tickers = symbol, period = "2Y", interval = "1D")
-  daily
-  hour = yf.download(tickers = symbol, period = "20D", interval = "60m")
-  hour
-  fifteen = yf.download(tickers = symbol, period = "5D", interval = "15m")
-  fifteen
+  daily = cached(symbol,"2Y", "1D")
+  hour = cached(symbol,"20D", "60m")
+  fifteen = cached(symbol,"5D", "15m")
   daily_dt = Symbol(daily)
   hour_dt = Symbol(hour)
   fif_dt = Symbol(fifteen)

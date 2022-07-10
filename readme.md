@@ -1,4 +1,3 @@
+DEMO on making trade judgement based on trend following system
 
-# Max Engine
-
-combine flask, bs4,... to scape data from internet.
+- Show Trading Signal

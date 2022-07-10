@@ -57,12 +57,13 @@ class Symbol():
       data.to_csv(self.file_name)
       return data
   def check_time(self):
-    mtime = os.path.getmtime(self.file_name)
-    mtime = datetime.datetime.fromtimestamp(mtime)
-    if datetime.datetime.now() - mtime > datetime.timedelta(minutes=15):
-        os.remove(self.file_name)
-        os.remove(self.graph)
-        print("Removing old Data")
+    if os.path.exists(self.file_name):
+      mtime = os.path.getmtime(self.file_name)
+      mtime = datetime.datetime.fromtimestamp(mtime)
+      if datetime.datetime.now() - mtime > datetime.timedelta(minutes=15):
+          os.remove(self.file_name)
+          os.remove(self.graph)
+          print("Removing old Data")
 
 
 

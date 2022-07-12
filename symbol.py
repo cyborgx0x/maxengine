@@ -91,8 +91,3 @@ def get_signal(symbol):
         "signal": "none",
         "price": fif_dt.price,
     }
-symbols_list = ["GBPUSD=X", "EURUSD=X", "GC=F", "JPY=X", "AUDUSD=X", "NZDUSD=X", "EURJPY=X","GBPJPY=X", "EURGBP=X", "EURCAD=X"]
-x = []
-for s in symbols_list:
-    n = get_signal(s)
-    print(n)

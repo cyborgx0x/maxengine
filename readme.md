@@ -1,3 +1,10 @@
-DEMO on making trade judgement based on trend following system
+F Engine - Backtesting And Trading Library for Python
 
-- Show Trading Signal
+Accept Dataframe
+
+Features:
+
+    - Backtesting
+    - Trade backward and forward
+    - Support TA-lib
+    - Support Screening and backtest for screening

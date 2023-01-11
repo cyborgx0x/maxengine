@@ -25,3 +25,5 @@ if __name__=="__main__":
     }
     engine = Engine(data)
     engine.execute_trade(Trend_Following(data))
+
+    

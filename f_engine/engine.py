@@ -14,6 +14,15 @@ class Engine():
             self.send_order(i)
     def set_signal(self, signal: Signal) -> None:
         self.signal_set.append(signal)
-    def send_order(self, order: Signal):
-        print(order.get_signal())
-        print(self.login_data)
+    def send_order(self, order: Signal) -> None:
+        signal = order.get_signal()
+        signal["time"] = self.get_time()
+        if not signal["order_type"] == "":
+            self.server.filling_order(order.get_signal())
+        return None
+    def start(self):
+        pass
+    def get_time(self):
+        return self.time.current_time
+    def connect(self, server):
+        self.server = server

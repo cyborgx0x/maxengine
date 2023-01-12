@@ -4,6 +4,7 @@ import os.path
 import pandas as pd
 import datetime
 import os
+from pandas import DataFrame
 
 
 def check_time(self):
@@ -27,3 +28,16 @@ class Pair():
 
     def get_current_price(self):
         pass
+
+
+def get_data(symbol: str, period: str, interval: str) -> DataFrame:
+
+    '''
+    Take symbol name, period, interval and return a Dataframe
+
+    This function originally get data from yfinance. 
+    Its can be extended later
+
+    '''
+    data = yf.download(tickers=symbol, period=period, interval=interval)
+    return data

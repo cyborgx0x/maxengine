@@ -1,8 +1,9 @@
 from datetime import datetime
 from distutils.log import error
-from sm import Account
+from .meta_wrapper import Account
 import MetaTrader5 as mt
-from file_handler import File
+from .trade_signal import Signal
+
 def compute_sma(history_price):
     f = history_price["close"].to_frame()
     f["SMA30"] = f["close"].rolling(30).mean()
@@ -55,8 +56,6 @@ for pair in all_pair:
         h1_price = acc.get_history_price(pair, mt.TIMEFRAME_H1, 60)
         d1_price = acc.get_history_price(pair, mt.TIMEFRAME_D1, 300)
         result = multi_timeframe_sma(m15_price, h1_price, d1_price)
-        f = File(filename = filename)
-        f.edit(content = pair + " "+ result + "\n" )        
-        f.save()
+
     except:
         print("there is some errors with this pair")

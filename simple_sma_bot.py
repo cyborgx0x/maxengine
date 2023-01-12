@@ -1,5 +1,5 @@
-from sm import Account
-from sma import sma_trend
+from f_engine.meta_wrapper import Account
+from f_engine.simple_sma import sma_trend
 import time
 
 login = {

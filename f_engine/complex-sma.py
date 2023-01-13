@@ -1,5 +1,3 @@
-from datetime import datetime
-from distutils.log import error
 from .meta_wrapper import Account
 import MetaTrader5 as mt
 from .trade_signal import Signal
@@ -46,8 +44,6 @@ acc = Account(**demo_account)
 acc.start()
 
 all_pair = acc.get_all_pair()
-filename = "signal.txt"
-
 
 for pair in all_pair:
     print(pair)
@@ -56,6 +52,5 @@ for pair in all_pair:
         h1_price = acc.get_history_price(pair, mt.TIMEFRAME_H1, 60)
         d1_price = acc.get_history_price(pair, mt.TIMEFRAME_D1, 300)
         result = multi_timeframe_sma(m15_price, h1_price, d1_price)
-
     except:
         print("there is some errors with this pair")

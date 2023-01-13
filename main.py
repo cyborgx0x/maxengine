@@ -1,4 +1,4 @@
-from f_engine import Engine, get_data, FakeServer, TimeMachine, SingleLine
+from f_engine import *
 
 if __name__=="__main__":
     symbol = "GBPUSD=X"
@@ -20,8 +20,10 @@ if __name__=="__main__":
     time_machine = TimeMachine()
     start_date = "2022-01-01"
     end_date = "2023-01-01"
-    time_machine.set_begin(start_date)
-    time_machine.set_end(end_date)
+    
+    time_machine.begin_time = start_date
+    time_machine.end_time = end_date
+
     time_machine.set_speed(100)
     time_machine.data = daily_data
     time_machine.server = server

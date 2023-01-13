@@ -13,7 +13,13 @@ class MT5Account():
     def start(self):
         mt.initialize()
     def login(self):
-        mt.login(self.account_number, self.password, self.server)
+        account = self.account_number
+        authorized = mt.login(int(account), password = self.password, server=self.server)
+        
+        if authorized:
+            print("connected to account #{}".format(account))
+        else:
+            print("failed to connect at account #{}, error code: {}".format(account, mt.last_error()))
 
     def info(self) -> None:
         return mt.account_info()
@@ -32,8 +38,8 @@ class MT5Account():
         return history_frame
 
     def get_current_price(self, pair_name):
-        print(pair_name)
         price = mt.symbol_info_tick(pair_name).ask
+        print(f"Price for {pair_name} is {price}")
         return price
 
     def trade(self, pair, price, order_type):
@@ -56,7 +62,7 @@ class MT5Account():
             "sl": sl,
             "tp": tp,
             "deviation": 20,
-            "magic": 234300,
+            "magic": 888666,
             "comment": "python script open",
             "type_time": mt.ORDER_TIME_GTC,
             "type_filling": mt.ORDER_FILLING_IOC,
@@ -65,5 +71,5 @@ class MT5Account():
     def execute_order(self, order) -> None:
 
         result = mt.order_send(order)
-        print("XXX")
+        print(f"Result for order is: {result}")
         return result

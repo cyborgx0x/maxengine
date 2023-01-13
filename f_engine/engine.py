@@ -38,7 +38,7 @@ class Engine():
         o = order.get_mt5_order()
         status = self.mt5.execute_order(o)
         self.order_list.append(o)
-        print(f"sending order: {order}")
+        # print(f"sending order: {order}")
         if status:
             print("XXX")
     def get_time(self) -> date:

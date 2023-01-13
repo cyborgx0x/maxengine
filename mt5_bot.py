@@ -7,6 +7,7 @@ import datetime
 load_dotenv()
 
 mt5 = MT5Account()
+print(type(os.getenv("password")))
 mt5.account_number = os.getenv("account_number")
 mt5.password = os.getenv("password")
 mt5.server = os.getenv("server") 
@@ -19,7 +20,6 @@ all_pair = mt5.get_all_pair()
 
 
 for i in all_pair:
-    print(i)
     instrument = i
     historical_data = mt5.get_history_price(instrument, mt.TIMEFRAME_D1, datetime.datetime.fromisoformat("2018-01-01"), datetime.datetime.now())
     data = {

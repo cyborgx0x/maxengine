@@ -42,7 +42,9 @@ class MT5Account():
         return price
 
     def execute_order(self, order: Order) -> None:
+        print(f"send request {order.symbol}")
         request = order.get_mt5_order()
+        print(f"request:{request}")
         result = mt.order_send(request)
         print(f"Result for order is: {result}")
         return result

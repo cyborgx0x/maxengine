@@ -1,3 +1,10 @@
+'''
+provide the way to work with both backtesting and live trading
+
+Send order to the Fake Server for the purpose of backtesting
+Send order to the any live trading software
+'''
+
 from .trade_signal import Signal
 import os
 from .server import FakeServer
@@ -5,6 +12,8 @@ from datetime import date
 from .meta_wrapper import MT5Account
 from .order import Order
 from typing import List
+from .time_machine import TimeMachine
+
 
 class Engine():
     '''
@@ -13,6 +22,7 @@ class Engine():
     '''
     signal_set:List[Signal] = []
     order_list = []
+    time = TimeMachine()
     def execute_trade(self, mt5=False) -> bool:
         '''
         execute all Signal from signal set to get order
@@ -26,25 +36,21 @@ class Engine():
         return True
         
     def send_order(self, order: Order) -> bool:
-        if order == None:
-            return False
-        else:
-            order.time = self.get_time()
-            if not order.type == "":
-                self.server.get_order(order)
-            return True
+        order.time = self.time.current_time
+        
+        if order.mt_type == "buy" or order.mt_type == "sell":
+            self.server.get_order(order)
+            self.order_list.append(order)
+        return True
 
     def send_order_mt5(self, order: Order) -> bool:
-
-        if order == None:
-            return False
-        else:
-            
+        if order.mt_type == "buy" or order.mt_type == "sell":
             self.mt5.execute_order(order)
             self.order_list.append(order.get_mt5_order())
+        else:
+            return False
 
-    def get_time(self) -> date:
-        return self.time.current_time
+
 
     def connect(self, server: FakeServer) -> bool:
         self.server = server

@@ -1,3 +1,10 @@
+'''
+provide the way to work with both backtesting and live trading
+
+Send order to the Fake Server for the purpose of backtesting
+Send order to the any live trading software
+'''
+
 from .trade_signal import Signal
 import os
 from .server import FakeServer

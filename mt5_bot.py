@@ -1,4 +1,4 @@
-from f_engine import MT5Account, Engine, SingleLine, multi_timeframe_sma
+from f_engine import MT5Account, Engine, SingleLine
 from dotenv import load_dotenv
 import time
 import os
@@ -23,13 +23,13 @@ engine.connect_mt5(mt5=mt5)
 
 all_pair = mt5.get_all_pair()
 
-for i in all_pair:
-    simple_strategy(engine, i)
+# for i in all_pair:
+#     simple_strategy(engine, i)
 
 
 def complex_strategy(engine: Engine, instrument:str)->None:
     m15_price = mt5.get_history_price(instrument, mt.TIMEFRAME_M15, datetime.datetime.fromisoformat("2018-01-01"), datetime.datetime.now())
     h1_price = mt5.get_history_price(instrument, mt.TIMEFRAME_H1, datetime.datetime.fromisoformat("2018-01-01"), datetime.datetime.now())
     d1_price = mt5.get_history_price(instrument, mt.TIMEFRAME_D1, datetime.datetime.fromisoformat("2018-01-01"), datetime.datetime.now())
-    result = multi_timeframe_sma(m15_price, h1_price, d1_price)
-    print(result)
+    # result = multi_timeframe_sma(m15_price, h1_price, d1_price)
+    # print(result)

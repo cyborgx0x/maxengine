@@ -32,14 +32,18 @@ class Data():
     def __init__(self) -> None:
         pass
     def get_data(self, symbol: str, period: str, interval: str):
-        data = yf.download(tickers=symbol, period=period, interval=interval)
+        data:DataFrame = yf.download(tickers=symbol, period=period, interval=interval)
+        data.rename(columns={'Close':'close'}, inplace=True)
         self.yahoo_data = data
+        print(data)
     def get_mt_data(self, *args, **kwargs):
         history = mt.copy_rates_range(*args, **kwargs)
         history_frame = pd.DataFrame(history)
         self.full_data = history_frame
     def get_current_price(self):
         pass
+    def get_data_v2(self, timeframe):
+        return "v2"
 
 
 def get_data(symbol: str, period: str, interval: str) -> DataFrame:

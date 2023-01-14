@@ -24,7 +24,7 @@ class Order():
 
     def __repr__(self) -> str:
         # self.get_mt5_order()
-        return f"{self.mt_type} for {self.symbol} at price {self.price} "
+        return f"{self.time}: {self.mt_type} for {self.symbol} at price {self.price} "
 
     def get_mt5_order(self) -> None:
         point = mt.symbol_info(self.symbol).point

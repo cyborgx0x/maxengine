@@ -12,6 +12,8 @@ from datetime import date
 from .meta_wrapper import MT5Account
 from .order import Order
 from typing import List
+from .time_machine import TimeMachine
+
 
 class Engine():
     '''
@@ -20,6 +22,7 @@ class Engine():
     '''
     signal_set:List[Signal] = []
     order_list = []
+    time = TimeMachine()
     def execute_trade(self, mt5=False) -> bool:
         '''
         execute all Signal from signal set to get order
@@ -36,13 +39,14 @@ class Engine():
         if order == None:
             return False
         else:
-            order.time = self.get_time()
-            if not order.type == "":
+            order.time = self.time.current_time
+            
+            if not order.mt_type == "":
                 self.server.get_order(order)
+                self.order_list.append(order)
             return True
 
     def send_order_mt5(self, order: Order) -> bool:
-
         if order == None:
             return False
         else:
@@ -50,8 +54,6 @@ class Engine():
             self.mt5.execute_order(order)
             self.order_list.append(order.get_mt5_order())
 
-    def get_time(self) -> date:
-        return self.time.current_time
 
     def connect(self, server: FakeServer) -> bool:
         self.server = server

@@ -51,4 +51,3 @@ class Order():
             "type_time": mt.ORDER_TIME_GTC,
             "type_filling": mt.ORDER_FILLING_IOC,
         }
-        return request

@@ -41,31 +41,6 @@ class MT5Account():
         price = mt.symbol_info_tick(pair_name).ask
         return price
 
-    def trade(self, pair, price, order_type):
-        point = mt.symbol_info(pair).point
-        if order_type == "buy":
-            ordt = mt.ORDER_TYPE_BUY
-            sl = price - 1000 * point
-            tp = price + 1000 * point
-        else:
-            ordt = mt.ORDER_TYPE_SELL
-            sl = price + 1000 * point
-            tp = price - 1000 * point
-        return {
-            "action": mt.TRADE_ACTION_DEAL,
-            "symbol": pair,
-            "volume": 0.1,
-            "type": ordt,
-            "price": price,
-            "sl": sl,
-            "tp": tp,
-            "deviation": 20,
-            "magic": 888666,
-            "comment": "python script open",
-            "type_time": mt.ORDER_TIME_GTC,
-            "type_filling": mt.ORDER_FILLING_IOC,
-        }
-
     def execute_order(self, order: Order) -> None:
         request = order.get_mt5_order()
         result = mt.order_send(request)

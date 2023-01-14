@@ -40,17 +40,15 @@ class Order():
             tp = self.price - 1000 * point
         request =  {
             "action": mt.TRADE_ACTION_DEAL,
-            "symbol": "BATUSDm",
+            "symbol": self.symbol,
             "volume": 0.1,
             "type": mt_type,
             "deviation": 20,
             "magic": 888666,
-            "comment": "TEST",
+            "comment": self.comment,
             "type_time": mt.ORDER_TIME_GTC,
             "type_filling": mt.ORDER_FILLING_IOC,
         }
-        print(self.mt_type)
-        print(request)
         return request
 
 # o.__dict__["func"] = 0

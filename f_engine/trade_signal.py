@@ -3,7 +3,7 @@ from .ta import TripleMA
 from .order import Order
 from pandas import DataFrame
 
-class Signal(object):
+class Signal():
     order = Order()
     def __init__(self, data: DataFrame) -> None:
         self._data = data
@@ -37,6 +37,7 @@ class Trend_Following(Signal):
 
 class SingleLine(Signal):
     def trend(self):
+        self.order.comment = f"Order Result from {self.__class__.__name__}"
         daily_dt = TripleMA(self._data.get("daily"))
         if daily_dt.result == "uptrend":
             self.order.mt_type = "buy"

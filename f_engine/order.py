@@ -26,7 +26,7 @@ class Order():
         # self.get_mt5_order()
         return f"{self.time}: {self.mt_type} for {self.symbol} at price {self.price} "
 
-    def get_mt5_order(self) -> None:
+    def get_mt5_order(self) -> dict:
         point = mt.symbol_info(self.symbol).point
         if self.mt_type == "buy":
             self.price = mt.symbol_info_tick(self.symbol).ask
@@ -52,5 +52,3 @@ class Order():
             "type_filling": mt.ORDER_FILLING_IOC,
         }
         return request
-
-# o.__dict__["func"] = 0

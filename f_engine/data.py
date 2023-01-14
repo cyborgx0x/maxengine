@@ -41,10 +41,8 @@ class Data():
         history_frame = pd.DataFrame(history)
         self.full_data = history_frame
         return history_frame
-    def get_current_price(self):
-        pass
     def get_data_v2(self, timeframe):
-        return "v2"
+        return timeframe
 
 
 def get_data(symbol: str, period: str, interval: str) -> DataFrame:

@@ -38,7 +38,7 @@ class Signal():
         try: 
             self.order.comment = f"{self.__class__.__name__}"
             self.process()
-        except:
+        except IndexError:
             print("process Err!")
         return self.order
     def get_backtesting_data(self) -> None:
@@ -46,7 +46,6 @@ class Signal():
         method for working with different data will stay here
         '''
         self._data = self.server.get_data()
-        return True
     def process(self, *args, **kwargs) -> None:
         '''
         logic goes here

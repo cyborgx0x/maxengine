@@ -8,7 +8,7 @@ class Order():
     action = ""
     symbol = ""
     volume = 1000
-    mt_type = -1
+    mt_type = ""
     price = 0
     sl = 0
     tp = 0
@@ -33,12 +33,14 @@ class Order():
             mt_type = mt.ORDER_TYPE_BUY
             sl = self.price - 1000 * point
             tp = self.price + 1000 * point
-        else:
+        elif self.mt_type == "sell":
             mt_type = mt.ORDER_TYPE_SELL
             self.price = mt.symbol_info_tick(self.symbol).bid
             sl = self.price + 1000 * point
             tp = self.price - 1000 * point
-        request =  {
+        else:
+            return None
+        return {
             "action": mt.TRADE_ACTION_DEAL,
             "symbol": self.symbol,
             "volume": 0.1,

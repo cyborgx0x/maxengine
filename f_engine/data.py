@@ -40,6 +40,7 @@ class Data():
         history = mt.copy_rates_range(*args, **kwargs)
         history_frame = pd.DataFrame(history)
         self.full_data = history_frame
+        return history_frame
     def get_current_price(self):
         pass
     def get_data_v2(self, timeframe):

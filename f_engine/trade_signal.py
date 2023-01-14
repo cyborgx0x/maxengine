@@ -20,7 +20,7 @@ class Signal():
     server = FakeServer()
     def __init__(self, symbol:str) -> None:
         self.order = Order()
-        if os.getenv("livetrading") != 0:
+        if os.getenv("livetrading") != "0":
             '''
             Data for backtesting will be processed here
             signal.server = server
@@ -28,17 +28,19 @@ class Signal():
             ''' 
             self.data = self.server.data
             self.get_backtesting_data()
+            self.order.price = self.server.get_price()
         else:
             self.data.get_mt_data(symbol, mt.TIMEFRAME_D1, datetime.datetime.fromisoformat("2018-01-01"), datetime.datetime.now())
             self._data = self.data.full_data
         self.order.symbol = symbol
-        self.order.price = self.server.get_price()
     def get_signal(self) -> Order:
-        self.process()
-        if self.order.mt_type == "":
-            return None
-        else:
-            return self.order
+
+        try: 
+            self.order.comment = f"{self.__class__.__name__}"
+            self.process()
+        except:
+            print("process Err!")
+        return self.order
     def get_backtesting_data(self) -> None:
         '''
         method for working with different data will stay here
@@ -66,7 +68,7 @@ class Trend_Following(Signal):
 
 class SingleLine(Signal):
     def process(self):
-        self.order.comment = f"Order Result from {self.__class__.__name__}"
+        
         daily_dt = TripleMA(self._data)
         if daily_dt.result == "uptrend":
             self.order.mt_type = "buy"
@@ -79,12 +81,20 @@ class SingleLine(Signal):
 class MultiTimeframeTrendFollowing(Signal):
     def __init__(self, symbol: str) -> None:
         super().__init__(symbol)
-        self.m15_price = self.data.get_data_v2("m15")
-        self.h1_price = self.data.get_data_v2("h1")
-        self.d1_price = self.data.get_data_v2("d1")
-        self.condition = {
-        }
-    def compute_sma(history_price):
+        if os.getenv("livetrading") != "0":
+            self.m15_price = self.data.get_data_v2("m15")
+            self.h1_price = self.data.get_data_v2("h1")
+            self.d1_price = self.data.get_data_v2("d1")
+        else:
+            print(self.order.symbol)
+            print("get price in m15")
+            self.m15_price = self.data.get_mt_data(symbol, mt.TIMEFRAME_M15, datetime.datetime.now()-datetime.timedelta(days=3), datetime.datetime.now())
+            print("get data in h1")
+            self.h1_price = self.data.get_mt_data(symbol, mt.TIMEFRAME_H1, datetime.datetime.now()-datetime.timedelta(days=50), datetime.datetime.now())
+            print("get data in d1")
+            self.d1_price = self.data.get_mt_data(symbol, mt.TIMEFRAME_D1, datetime.datetime.now()-datetime.timedelta(days=250), datetime.datetime.now())
+
+    def compute_sma(self, history_price):
         f = history_price["close"].to_frame()
         f["SMA50"] = f["close"].rolling(50).mean()
         f["SMA100"] = f["close"].rolling(100).mean()
@@ -92,10 +102,10 @@ class MultiTimeframeTrendFollowing(Signal):
         f.dropna(inplace = True)
         return f
 
-    def multi_timeframe_sma(self,m15_price, h1_price, d1_price):
-        d1_sma = self.compute_sma(d1_price)
-        h1_sma = self.compute_sma(h1_price)
-        m15_sma = self.compute_sma(m15_price)
+    def process(self):
+        d1_sma = self.compute_sma(self.d1_price)
+        h1_sma = self.compute_sma(self.h1_price)
+        m15_sma = self.compute_sma(self.m15_price)
         last_d1 = d1_sma.iloc[-1]
         last_h1 = h1_sma.iloc[-1]
         last_m15 = m15_sma.iloc[-1]
@@ -107,8 +117,10 @@ class MultiTimeframeTrendFollowing(Signal):
         m15_short_condition = last_m15["SMA50"] < last_m15["close"] and last_m15["close"] < last_m15["SMA200"] 
         if d1_long_condition and m15_long_condition:
             self.order.mt_type = "buy"
+            print("buy criterias met!")
         elif d1_short_condition  and m15_short_condition:
             self.order.mt_type = "sell"
+            print("sell criterias met!")
         else:
             self.order.mt_type = ""
         

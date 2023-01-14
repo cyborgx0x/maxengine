@@ -47,12 +47,14 @@ class Engine():
             return True
 
     def send_order_mt5(self, order: Order) -> bool:
-        if order == None:
+        if order == None: 
             return False
-        else:
-            
+        if order.mt_type == "buy" or order.mt_type == "sell":
             self.mt5.execute_order(order)
             self.order_list.append(order.get_mt5_order())
+        else:
+            return False
+
 
 
     def connect(self, server: FakeServer) -> bool:

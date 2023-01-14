@@ -39,12 +39,10 @@ class MT5Account():
 
     def get_current_price(self, pair_name):
         price = mt.symbol_info_tick(pair_name).ask
-        print(f"Price for {pair_name} is {price}")
         return price
 
     def trade(self, pair, price, order_type):
         point = mt.symbol_info(pair).point
-        print(point)
         if order_type == "buy":
             ordt = mt.ORDER_TYPE_BUY
             sl = price - 1000 * point
@@ -68,8 +66,8 @@ class MT5Account():
             "type_filling": mt.ORDER_FILLING_IOC,
         }
 
-    def execute_order(self, order) -> None:
-
-        result = mt.order_send(order)
+    def execute_order(self, order: Order) -> None:
+        request = order.get_mt5_order()
+        result = mt.order_send(request)
         print(f"Result for order is: {result}")
         return result

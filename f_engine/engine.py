@@ -26,21 +26,23 @@ class Engine():
         return True
         
     def send_order(self, order: Order) -> bool:
-        order.time = self.get_time()
-        if not order.type == "":
-            self.server.get_order(order)
-        return True
+        if order == None:
+            return False
+        else:
+            order.time = self.get_time()
+            if not order.type == "":
+                self.server.get_order(order)
+            return True
 
     def send_order_mt5(self, order: Order) -> bool:
-        ''''
-        check logic here
-        '''
-        o = order.get_mt5_order()
-        status = self.mt5.execute_order(o)
-        self.order_list.append(o)
-        # print(f"sending order: {order}")
-        if status:
-            print("XXX")
+
+        if order == None:
+            return False
+        else:
+            
+            self.mt5.execute_order(order)
+            self.order_list.append(order.get_mt5_order())
+
     def get_time(self) -> date:
         return self.time.current_time
 

@@ -8,7 +8,7 @@ class Order():
     action = ""
     symbol = ""
     volume = 1000
-    type = -1
+    mt_type = -1
     price = 0
     sl = 0
     tp = 0
@@ -23,32 +23,34 @@ class Order():
         pass
 
     def __repr__(self) -> str:
-        return f"{self.type} for {self.symbol} at price {self.price} "
+        # self.get_mt5_order()
+        return f"{self.mt_type} for {self.symbol} at price {self.price} "
 
     def get_mt5_order(self) -> None:
         point = mt.symbol_info(self.symbol).point
-
-        if self.type == "buy":
-            type = mt.ORDER_TYPE_BUY
+        if self.mt_type == "buy":
+            self.price = mt.symbol_info_tick(self.symbol).ask
+            mt_type = mt.ORDER_TYPE_BUY
             sl = self.price - 1000 * point
             tp = self.price + 1000 * point
         else:
-            type = mt.ORDER_TYPE_SELL
+            mt_type = mt.ORDER_TYPE_SELL
+            self.price = mt.symbol_info_tick(self.symbol).bid
             sl = self.price + 1000 * point
             tp = self.price - 1000 * point
-        return {
+        request =  {
             "action": mt.TRADE_ACTION_DEAL,
-            "symbol": self.symbol,
+            "symbol": "BATUSDm",
             "volume": 0.1,
-            "type": type,
-            "price": self.price,
-            "sl": sl,
-            "tp": tp,
+            "type": mt_type,
             "deviation": 20,
-            "magic": 234300,
-            "comment": self.comment,
+            "magic": 888666,
+            "comment": "TEST",
             "type_time": mt.ORDER_TIME_GTC,
             "type_filling": mt.ORDER_FILLING_IOC,
         }
+        print(self.mt_type)
+        print(request)
+        return request
 
 # o.__dict__["func"] = 0

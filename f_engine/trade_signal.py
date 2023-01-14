@@ -11,7 +11,10 @@ class Signal(object):
     def get_signal(self) -> Order:
         self.trend()
         self.order.symbol = self._data.get("symbol")
-        return self.order
+        if self.order.mt_type == "":
+            return None
+        else:
+            return self.order
 
     def trend(self) -> None:
         '''
@@ -27,21 +30,17 @@ class Trend_Following(Signal):
         fif_dt = TripleMA(self._data.get("fifteen"))
         self.order.price = daily_dt.price
         if daily_dt.result == "uptrend" and hour_dt.result == "uptrend":
-            self.order.type = "buy"
+            self.order.mt_type = "buy"
         if daily_dt.result == "downtrend" and hour_dt.result == "downtrend":
-            self.order.type = "sell"
+            self.order.mt_type = "sell"
 
 
 class SingleLine(Signal):
     def trend(self):
         daily_dt = TripleMA(self._data.get("daily"))
-        try:
-            self.order.price = daily_dt.price
-        except:
-            print("No Price")
         if daily_dt.result == "uptrend":
-            self.order.type = "buy"
+            self.order.mt_type = "buy"
         elif daily_dt.result == "downtrend":
-            self.order.type = "sell"
+            self.order.mt_type = "sell"
         else:
-            self.order.type = ""
+            self.order.mt_type = ""

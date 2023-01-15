@@ -15,8 +15,9 @@ Definition:
 - Indicator: Indicators are statistics used to measure current conditions as well as to forecast financial or economic trends. In the world of investing, indicators typically refer to technical chart patterns deriving from the price, volume, or open interest of a given security.
 - TA: A library of indicators
 - Engine: Automatic Apply a set of stratefies and send order to server.
-- Fake Server: Handle the Request, Manage the Account, Keep the account history. The Price data of fake server and client can be different. 
-
+- Fake Server: Handle the Request, Manage the Account, Keep the account history. 
+- Time Machine: Create a time simulator. This can provide way to connect with other kind of event.
 
 How it Work?
 By letting the fake server and client to the same time, both of them now have the same price data. No need to loop over the price data. 
+

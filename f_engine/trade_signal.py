@@ -101,6 +101,17 @@ class MultiTimeframeTrendFollowing(Signal):
         f.dropna(inplace = True)
         return f
 
+    def trend_mature(self, trend_lifetime, period):
+        if trend_lifetime > period:
+            return False
+        else:
+            return True
+    def trend_early(self, trend_early, period):
+        if trend_early:
+            return True
+        else:
+            return False
+
     def process(self):
         d1_sma = self.compute_sma(self.d1_price)
         h1_sma = self.compute_sma(self.h1_price)
@@ -114,6 +125,7 @@ class MultiTimeframeTrendFollowing(Signal):
         d1_short_condition = last_d1["SMA50"] < last_d1["SMA100"] and last_d1["SMA100"] < last_d1["SMA200"] 
         h1_short_condition = last_h1["SMA50"] < last_h1["SMA100"] and last_h1["SMA100"] < last_h1["SMA200"] 
         m15_short_condition = last_m15["SMA50"] < last_m15["close"] and last_m15["close"] < last_m15["SMA200"] 
+
         if d1_long_condition and m15_long_condition:
             self.order.mt_type = "buy"
             print("buy criterias met!")

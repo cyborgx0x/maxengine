@@ -2,6 +2,8 @@ import time
 import datetime
 from threading import Thread, Lock
 from typing import Any
+
+
 class Config():
     speed = 100
 

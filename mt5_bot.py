@@ -1,4 +1,5 @@
 from f_engine import MT5Account, Engine, SingleLine, MultiTimeframeTrendFollowing
+import configurations
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -9,9 +10,9 @@ def simple_strategy(engine: Engine, instrument: str) -> None:
     engine.signal_set.clear()
 
 mt5 = MT5Account()
-mt5.account_number = os.getenv("account_number")
-mt5.password = os.getenv("password")
-mt5.server = os.getenv("server")
+mt5.account_number = configurations.MT5_ACCOUNT_NUMBER
+mt5.password = configurations.MT5_PASSWORD
+mt5.server = configurations.MT5_PASSWORD
 mt5.start()
 mt5.login()
 engine = Engine()

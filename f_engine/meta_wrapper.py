@@ -8,18 +8,21 @@ from .order import Order
 class MT5Account():
 
     '''
-    Provide a wrapper to work with MT5
+    Provide an easy way to work with MT5, Type Hint Include!!!
     '''
+    account_number:int
+    password:str
+    server:str
+    
     def start(self):
         mt.initialize()
     def login(self):
-        account = self.account_number
-        authorized = mt.login(int(account), password = self.password, server=self.server)
+        authorized = mt.login(int(self.account_number), password = self.password, server=self.server)
         
         if authorized:
-            print("connected to account #{}".format(account))
+            print("connected to account #{}".format(self.account_number))
         else:
-            print("failed to connect at account #{}, error code: {}".format(account, mt.last_error()))
+            print("failed to connect at account #{}, error code: {}".format(self.account_number, mt.last_error()))
 
     def info(self) -> None:
         return mt.account_info()

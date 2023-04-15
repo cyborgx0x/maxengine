@@ -21,3 +21,22 @@ Definition:
 How it Work?
 By letting the fake server and client to the same time, both of them now have the same price data. No need to loop over the price data. 
 
+
+## Problem
+
+I want to address the problem of generating ideas and selecting new trade to execute.
+
+Typically, If you want to have new trade, you want to filter the price from several filters, such as: 
+
+- Indicator
+- Visualizing by chart
+- Available capital
+- The current Economic Situation
+
+By doing so, you limit yourself from untested prediction. 
+
+There are some common errors that you should avoid
+
+- You may apply the filter the wrong way => Result in putting wrong position
+
+For example. By including the Risk:Reward Ratio to your filter. 

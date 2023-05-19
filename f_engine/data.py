@@ -13,6 +13,7 @@ import datetime
 import os
 from pandas import DataFrame
 import MetaTrader5 as mt
+from .time_machine import TimeMachine
 
 def check_time(self):
     if os.path.exists(self.file_name):
@@ -27,8 +28,8 @@ class Data():
     '''
     provide the way to manage data from various sources
 
-    
     '''
+    time = TimeMachine()
     def __init__(self) -> None:
         pass
     def get_data(self, symbol: str, period: str, interval: str):
@@ -37,12 +38,26 @@ class Data():
         self.yahoo_data = data
         print(data)
     def get_mt_data(self, *args, **kwargs):
+
         history = mt.copy_rates_range(*args, **kwargs)
         history_frame = pd.DataFrame(history)
         self.full_data = history_frame
         return history_frame
-    def get_data_v2(self, timeframe):
-        return timeframe
+    def get_mt_data_v2(self,symbol, timeframe):
+        self.m15 = self.time.current_time - datetime.timedelta(5)
+        self.h1 = self.time.current_time - datetime.timedelta(20)
+        self.d1 = self.time.current_time - datetime.timedelta(300)
+        start_time = self.__getattribute__(timeframe)
+        end_time = self.time.current_time
+        data = mt.copy_rates_range(symbol, mt.TIMEFRAME_M15, start_time, end_time)
+        print(data)
+        return data
+
+    def get_data_v2(self, symbol, timeframe):
+        '''
+        get the data outside of mt5
+        '''
+        return None
 
 
 def get_data(symbol: str, period: str, interval: str) -> DataFrame:

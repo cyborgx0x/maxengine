@@ -23,7 +23,7 @@ class Order():
         pass
 
     def __repr__(self) -> str:
-        # self.get_mt5_order()
+        # self.get_mt5_order()  
         return f"{self.time}: {self.mt_type} for {self.symbol} at price {self.price} "
 
     def get_mt5_order(self) -> dict:
@@ -43,7 +43,7 @@ class Order():
         return {
             "action": mt.TRADE_ACTION_DEAL,
             "symbol": self.symbol,
-            "volume": 0.1,
+            "volume": 0.01,
             "type": mt_type,
             "deviation": 20,
             "magic": 888666,

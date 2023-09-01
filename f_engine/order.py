@@ -51,3 +51,10 @@ class Order():
             "type_time": mt.ORDER_TIME_GTC,
             "type_filling": mt.ORDER_FILLING_IOC,
         }
+
+class MetaOrder(Order):
+    id:str
+    def send(self):
+        ...
+    def get(self):
+        ...

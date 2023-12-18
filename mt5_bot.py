@@ -1,8 +1,5 @@
 from f_engine import MT5Account, Engine, SingleLine, MultiTimeframeTrendFollowing
-import configurations
-from dotenv import load_dotenv
-import os
-load_dotenv()
+from configurations import *
 
 def simple_strategy(engine: Engine, instrument: str) -> None:
     engine.signal_set.append(SingleLine(symbol=instrument))
@@ -10,9 +7,9 @@ def simple_strategy(engine: Engine, instrument: str) -> None:
     engine.signal_set.clear()
 
 mt5 = MT5Account()
-mt5.account_number = configurations.MT5_ACCOUNT_NUMBER
-mt5.password = configurations.MT5_PASSWORD
-mt5.server = configurations.MT5_PASSWORD
+mt5.account_number = MT5_ACCOUNT_NUMBER
+mt5.password = MT5_PASSWORD
+mt5.server = MT5_SERVER
 mt5.start()
 mt5.login()
 engine = Engine()
@@ -24,7 +21,7 @@ def complex_strategy(engine: Engine, instrument:str)->None:
 
 pairs = []
 trading_pair = []
-
+#Trading logic
 for pair in pairs:
     if pair.spread > 20:
         continue
@@ -88,8 +85,8 @@ class MarketCondition():
 
 all_pair = mt5.get_all_pair()
 
-for i in all_pair:
-    complex_strategy(engine, i)
+for pair in all_pair:
+    complex_strategy(engine, pair)
 
 def check_condition():
     '''

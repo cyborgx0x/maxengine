@@ -1,10 +1,13 @@
 import MetaTrader5 as mt
-class Order():
-    '''
+
+
+class Order:
+    """
     mimic the order that client send to the server
 
     this should be compatible with mt5 or other famous trading system.
-    '''
+    """
+
     action = ""
     symbol = ""
     volume = 1000
@@ -23,8 +26,8 @@ class Order():
         pass
 
     def __repr__(self) -> str:
-        # self.get_mt5_order()  
-        return f"{self.time}: {self.mt_type} for {self.symbol} at price {self.price} "
+        # self.get_mt5_order()
+        return f"{self.mt_type} {self.symbol} {self.price}"
 
     def get_mt5_order(self) -> dict:
         point = mt.symbol_info(self.symbol).point
@@ -52,9 +55,12 @@ class Order():
             "type_filling": mt.ORDER_FILLING_IOC,
         }
 
+
 class MetaOrder(Order):
-    id:str
+    id: str
+
     def send(self):
         ...
+
     def get(self):
         ...

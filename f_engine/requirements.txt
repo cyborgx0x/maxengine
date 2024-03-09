@@ -1,0 +1,7 @@
+matplotlib
+yfinance
+pandas
+MetaTrader5
+numpy
+python-dotenv
+Nasdaq-Data-Link
